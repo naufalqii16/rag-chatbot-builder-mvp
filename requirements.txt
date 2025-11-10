@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+qdrant-client
+langchain
+llama-index
+pydantic
+python-dotenv
+tiktoken
+streamlit
+requests
+groq
