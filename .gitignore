@@ -1,2 +1,7 @@
 myvenv
 .env
+DataGlossary_ingest_2.xlsx
+DataGlossary_ingest.xlsx
+dataIngestion.ipynb
+test_usage.py
+__pycache__/
