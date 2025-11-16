@@ -200,9 +200,18 @@ def ingestion_pipeline(file_path):
     return df_valid, df_invalid
 
 
-df_clean,df_invalid = ingestion_pipeline(r'rag-chatbot-builder-mvp\data\DataGlossary.xlsx')
-print(df_clean.head())
-output_path = r"rag-chatbot-builder-mvp\data\DataGlossary_clean.xlsx"
+import os
 
-# Simpan ke Excel
+# 获取项目根目录
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+data_dir = os.path.join(project_root, 'data')
+
+input_file = os.path.join(data_dir, 'DataGlossary.xlsx')
+df_clean, df_invalid = ingestion_pipeline(input_file)
+print(df_clean.head())
+
+output_path = os.path.join(data_dir, 'DataGlossary_clean.xlsx')
+
+print('done')
 df_clean.to_excel(output_path, index=False)
+print('done weite')
