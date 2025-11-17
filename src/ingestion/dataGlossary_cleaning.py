@@ -202,7 +202,7 @@ def ingestion_pipeline(file_path):
 
 import os
 
-# 获取项目根目录
+
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 data_dir = os.path.join(project_root, 'data')
 
@@ -212,6 +212,5 @@ print(df_clean.head())
 
 output_path = os.path.join(data_dir, 'DataGlossary_clean.xlsx')
 
-print('done')
+
 df_clean.to_excel(output_path, index=False)
-print('done weite')

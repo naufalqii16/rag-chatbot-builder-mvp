@@ -1,9 +1,18 @@
+"""
+DataGlossary Chunking & Preprocessing Module
+---------------------------------------------
+This module handles chunking and preprocessing specifically for DataGlossary.xlsx
 
-# Define chunk parameters (chunk size & overlap)
-# Split data by row, paragraph, or long definition
-# Normalize text (lowercase, remove special characters)
-# Save chunking results to data/chunks.json
+Tasks:
+1. Define chunk parameters (chunk size & overlap)
+2. Split data by row, paragraph, or long definition
+3. Normalize text (lowercase, remove special characters)
+4. Save chunking results to data/DataGlossary_Chunks/DataGlossary_chunks.json
+5. Generate chunking statistics
 
+Author: RAG Chatbot Builder
+Date: 2025
+"""
 
 import pandas as pd
 import numpy as np
@@ -14,9 +23,19 @@ from typing import List, Dict, Tuple
 from datetime import datetime
 
 
-class TextChunker:
+class DataGlossaryChunker:
+    """
+    A class to handle text chunking and preprocessing for DataGlossary data.
+    """
     
     def __init__(self, chunk_size: int = 512, chunk_overlap: int = 50):
+        """
+        Initialize the DataGlossaryChunker with configurable parameters.
+        
+        Args:
+            chunk_size (int): Maximum number of characters per chunk
+            chunk_overlap (int): Number of characters to overlap between chunks
+        """
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.chunks = []
@@ -30,9 +49,16 @@ class TextChunker:
     
     def normalize_text(self, text: str) -> str:
         """
+        Normalize text by:
         - Converting to lowercase
         - Removing special characters (keeping alphanumeric, spaces, and basic punctuation)
         - Removing extra whitespace
+        
+        Args:
+            text (str): Input text to normalize
+            
+        Returns:
+            str: Normalized text
         """
         if pd.isnull(text) or text is None:
             return ""
@@ -52,6 +78,16 @@ class TextChunker:
         return text
     
     def split_by_row(self, df: pd.DataFrame, text_columns: List[str]) -> List[Dict]:
+        """
+        Split data by row - each row becomes one or more chunks.
+        
+        Args:
+            df (pd.DataFrame): Input dataframe
+            text_columns (List[str]): Columns to combine for chunking
+            
+        Returns:
+            List[Dict]: List of chunk dictionaries
+        """
         chunks = []
         
         for idx, row in df.iterrows():
@@ -70,12 +106,12 @@ class TextChunker:
             normalized_text = self.normalize_text(combined_text)
             
             if normalized_text:
-                # Split into chunks if text is too longg
+                # Split into chunks if text is too long
                 text_chunks = self._split_long_text(normalized_text)
                 
                 for chunk_idx, chunk_text in enumerate(text_chunks):
                     chunk = {
-                        'chunk_id': f"row_{idx}_chunk_{chunk_idx}",
+                        'chunk_id': f"dataglossary_row_{idx}_chunk_{chunk_idx}",
                         'row_index': int(idx),
                         'chunk_index': chunk_idx,
                         'text': chunk_text,
@@ -88,6 +124,16 @@ class TextChunker:
         return chunks
     
     def split_by_paragraph(self, text: str, metadata: Dict = None) -> List[Dict]:
+        """
+        Split text by paragraphs (newlines).
+        
+        Args:
+            text (str): Input text
+            metadata (Dict): Optional metadata to attach to chunks
+            
+        Returns:
+            List[Dict]: List of chunk dictionaries
+        """
         chunks = []
         paragraphs = text.split('\n')
         
@@ -112,6 +158,15 @@ class TextChunker:
         return chunks
     
     def _split_long_text(self, text: str) -> List[str]:
+        """
+        Split long text into chunks with overlap.
+        
+        Args:
+            text (str): Input text
+            
+        Returns:
+            List[str]: List of text chunks
+        """
         if len(text) <= self.chunk_size:
             return [text]
         
@@ -123,7 +178,9 @@ class TextChunker:
             end = start + self.chunk_size
             chunk = text[start:end]
             
+            # Try to break at sentence boundary if possible
             if end < len(text):
+                # Look for sentence endings within last 100 chars
                 last_period = chunk.rfind('.')
                 last_comma = chunk.rfind(',')
                 
@@ -139,18 +196,34 @@ class TextChunker:
             # Move start position with overlap
             start = end - self.chunk_overlap
             
+            # Prevent infinite loop
             if start >= len(text):
                 break
         
         return chunks
     
     def _estimate_tokens(self, text: str) -> int:
-        # Estimate token count.
+        """
+        Estimate token count (rough approximation: ~4 chars per token).
+        
+        Args:
+            text (str): Input text
+            
+        Returns:
+            int: Estimated token count
+        """
         return len(text) // 4
     
     def calculate_statistics(self, chunks: List[Dict]) -> Dict:
-   
-        # Calculate statistics for the chunks.
+        """
+        Calculate statistics for the chunks.
+        
+        Args:
+            chunks (List[Dict]): List of chunks
+            
+        Returns:
+            Dict: Statistics dictionary
+        """
         if not chunks:
             return self.statistics
         
@@ -172,14 +245,20 @@ class TextChunker:
         return self.statistics
     
     def save_chunks(self, chunks: List[Dict], output_path: str) -> None:
-        # Save chunks to JSON file.
+        """
+        Save chunks to JSON file.
         
+        Args:
+            chunks (List[Dict]): List of chunks
+            output_path (str): Path to save JSON file
+        """
         output_data = {
             'metadata': {
                 'created_at': datetime.now().isoformat(),
                 'chunk_size': self.chunk_size,
                 'chunk_overlap': self.chunk_overlap,
-                'total_chunks': len(chunks)
+                'total_chunks': len(chunks),
+                'source': 'DataGlossary.xlsx'
             },
             'statistics': self.statistics,
             'chunks': chunks
@@ -194,8 +273,13 @@ class TextChunker:
         print(f"✅ Chunks saved to: {output_path}")
     
     def save_chunks_csv(self, chunks: List[Dict], output_path: str) -> None:
-        # Save chunks to CSV file (flattened version).
+        """
+        Save chunks to CSV file (flattened version).
         
+        Args:
+            chunks (List[Dict]): List of chunks
+            output_path (str): Path to save CSV file
+        """
         # Flatten chunks for CSV
         flattened_chunks = []
         for chunk in chunks:
@@ -214,12 +298,12 @@ class TextChunker:
         
         df = pd.DataFrame(flattened_chunks)
         df.to_csv(output_path, index=False, encoding='utf-8')
-        print(f"✅ Chunks CSV saved to: {output_path}")
+        print(f"✅ Chunks CSV saved to: {output_path}\")")
     
     def print_statistics(self) -> None:
         """Print chunking statistics in a formatted way."""
         print("\n" + "="*60)
-        print("📊 CHUNKING STATISTICS")
+        print("📊 DATAGLOSSARY CHUNKING STATISTICS")
         print("="*60)
         for key, value in self.statistics.items():
             if isinstance(value, float):
@@ -230,12 +314,12 @@ class TextChunker:
 
 
 def main():
-    
-    # Main function to execute the chunking pipeline.
-    
-    # Conf
-    CHUNK_SIZE = 512  
-    CHUNK_OVERLAP = 50 
+    """
+    Main function to execute the DataGlossary chunking pipeline.
+    """
+    # Configuration
+    CHUNK_SIZE = 512  # Maximum characters per chunk
+    CHUNK_OVERLAP = 50  # Characters overlap between chunks
     
     # Get project paths
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -243,21 +327,26 @@ def main():
     
     # Input and output paths
     input_file = os.path.join(data_dir, 'DataGlossary_clean.xlsx')
-    output_json = os.path.join(data_dir, 'chunks.json')
-    output_csv = os.path.join(data_dir, 'chunks.csv')
+    output_dir = os.path.join(data_dir, 'DataGlossary_Chunks')
+    os.makedirs(output_dir, exist_ok=True)
     
-    print("🚀 Starting Chunking & Preprocessing Pipeline...")
-    print(f" Input file: {input_file}")
-    print(f" Chunk size: {CHUNK_SIZE}")
-    print(f" Chunk overlap: {CHUNK_OVERLAP}\n")
+    output_json = os.path.join(output_dir, 'DataGlossary_chunks.json')
+    output_csv = os.path.join(output_dir, 'DataGlossary_chunks.csv')
+    
+    print("="*70)
+    print("🚀 DataGlossary Chunking & Preprocessing Pipeline")
+    print("="*70)
+    print(f"📁 Input file: {input_file}")
+    print(f"⚙️  Chunk size: {CHUNK_SIZE}")
+    print(f"⚙️  Chunk overlap: {CHUNK_OVERLAP}\n")
     
     # Load data
-    print("📖 Loading data...")
+    print("📖 Loading DataGlossary data...")
     df = pd.read_excel(input_file)
     print(f"✅ Loaded {len(df)} rows with {len(df.columns)} columns")
     
     # Initialize chunker
-    chunker = TextChunker(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
+    chunker = DataGlossaryChunker(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
     
     # Define which columns to include in chunks
     text_columns = [
@@ -288,6 +377,10 @@ def main():
     chunker.save_chunks(chunks, output_json)
     chunker.save_chunks_csv(chunks, output_csv)
     
+    # Print sample chunks
+    print("\n" + "="*60)
+    print("📄 SAMPLE CHUNKS (First 3)")
+    print("="*60)
     for i, chunk in enumerate(chunks[:3]):
         print(f"\n--- Chunk {i+1} ---")
         print(f"ID: {chunk['chunk_id']}")
@@ -295,7 +388,12 @@ def main():
         print(f"Tokens: {chunk['token_count']}")
         print(f"Text preview: {chunk['text'][:200]}...")
     
-    print("\n✨ Chunking & Preprocessing completed successfully!\n")
+    print("\n" + "="*70)
+    print("✨ DataGlossary Chunking & Preprocessing completed successfully!")
+    print("="*70)
+    print(f"📄 Output JSON: {output_json}")
+    print(f"📄 Output CSV: {output_csv}")
+    print("="*70 + "\n")
 
 
 if __name__ == "__main__":

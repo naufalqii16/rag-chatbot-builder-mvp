@@ -1,0 +1,852 @@
+{
+  "metadata": {
+    "created_at": "2025-11-17T21:42:32.837818",
+    "chunk_size": 512,
+    "chunk_overlap": 50,
+    "source_file": "SOP_Hotel.pdf",
+    "source_file_type": "PDF"
+  },
+  "statistics": {
+    "total_chunks": 83,
+    "average_chunk_length": 476.6024096385542,
+    "average_token_count": 118.8433734939759,
+    "min_chunk_length": 386,
+    "max_chunk_length": 512,
+    "total_characters": 39558,
+    "total_estimated_tokens": 9864,
+    "chunk_size_setting": 512,
+    "chunk_overlap_setting": 50
+  },
+  "chunks": [
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_0",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 0,
+      "text": "sop hotel sang surya tanggal revisi tanggal berlaku kode dokumen universitas muhammadiyah bulukumba kata pengantar puji syukur penulis panjatkan kehadirat tuhan yang maha esa yang telah melimpahkan rahmat -nya, s ehingga sop hotel sang surya universitas muhammadiyah bukukumba dapat tersusun dan diselesaikan tidak jauh dari waktu perkiraan. salam dan salawat semoga senantiasa dilimpahkan kepada nabi muhammad shallaallaahu alaihi wa sallama beserta keluarga beliau.",
+      "chunk_length": 467,
+      "token_count": 116
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_1",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 1,
+      "text": "allaahu alaihi wa sallama beserta keluarga beliau. sop hotel sang surya universitas muhammadiyah bukukumba ini dimaksud sebagai m edia informasi ringkas tapi jelas terkait khususnya layanan yang dilakukan karyawan hotel untuk para pengunjung hotel baik internal maupun eksternal. beberapa informasi penunjang yang sejalan kegiatan yang ada di hotel ini juga disediakan. sebagaimana kat a pepatah bahwa tak ada gading yang tak retak , sop ini tentunya masih terdapat kekurangan.",
+      "chunk_length": 477,
+      "token_count": 119
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_2",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 2,
+      "text": "etak , sop ini tentunya masih terdapat kekurangan. oleh karena itu, kami akan selalu terbuka atas segala masukan atau saran konstruktif demi perbaikan sop ini. ii daftar isi halaman judul. i katapengantar.. ii daftar isi.... iv bab 1 pendahuluan 1.1 latar belakang.. 1 1.2 pengertian hotel...2 1.3 penyediaan makanan dan minuman.. 3 1.4 pengertian kitchen dapur..4 1.5 pengertian standar operasional prosedur...5 bab ii gambaran umum 2.1 sejarah singkat hotel sang surya universitas muhammadiyah bulukumba...",
+      "chunk_length": 508,
+      "token_count": 127
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_3",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 3,
+      "text": "l sang surya universitas muhammadiyah bulukumba... 8 2.2 fasilitas hotel... 8 2.3 struktur organisa si hotel..11 2.4 job description... 12 2.5 hubungan antar bagian... 14 bab iii pembahasan 3.1 gambaran umum standar operasional prosedur. 15 3.2 pentingnya menerapkan sop..27 3.3 pengaruh sop untuk kelancaran kegiaran training..28 bab iv sop -sop 4.1 sop resepsionis.21 4.2 sop persiapan kamar tamu untuk check in.22 4.3 sop tamu check in.23 4.4 sop membersih kan kamar tamu yang menginap.23 iii 4.",
+      "chunk_length": 498,
+      "token_count": 124
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_4",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 4,
+      "text": "p membersih kan kamar tamu yang menginap.23 iii 4.5 sop membersihkan kamar tamu check out.24 4.6 sop menyiapkan barang barang kotor untuk dilaundry.25 4.7 sop area publik.25 4.8 sop penyiapan sarapan pagi.25 4.9 sop penyediaan bahan makanan dan minuman.26 lampiran. s28 iv bab i pendahuluan 1.1 latar belakang di hote l sendiri terdapat beberapa karyawan yang bekerja di dalamnya, adapun di dalam hotel tersebut terdapat karyawan yang statusnya permanen, kontrak, dw daily worker dan trainer.",
+      "chunk_length": 492,
+      "token_count": 123
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_5",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 5,
+      "text": "ya permanen, kontrak, dw daily worker dan trainer. untuk setiap karyawan yang bekerja dalam hotel tentu harus mengetahui sistem atau tata cara dalam bekerja baik itu cara melayani tamu, mengatasi masalah komplain dari tamu dan memberikan pelayanan serta rasa hormat kepada tamu, baik tamu itu pada posisi benar atau tamu yang salah. setiap staff hotel harus tetap memberikan pelayanan terbaik yang bisa mereka kas ih untuk para tamu karena pada hal tersebut kepuasan tamu adalah hal penting dan yang utama bagi k",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_6",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 6,
+      "text": "asan tamu adalah hal penting dan yang utama bagi kelancaran dalam berdirinya hotel itu sendiri. hal ini pasti sudah tercantum dan sudah tertulis untuk diketahui oleh para staff hotel yang biasa kita ketahui dengan istilah sop standar operasional prosedur . adanya sop sendiri adalah untuk kelancaran kegiatan pekerjaan yang dilakukan seorang staff hotel. untuk melayani tamu juga memiliki standar operasionalnya dimulai dari pemesanan kamar sampai pada penyiapan bahan makanan. 1.",
+      "chunk_length": 480,
+      "token_count": 120
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_7",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 7,
+      "text": "anan kamar sampai pada penyiapan bahan makanan. 1.2 pengertian hotel pengertian hotel menurut undang -undang nomor 10 tahun 2009 tentang kepariwisataan hotel adalah penyediaan akomodasi secara harian berupa kamar - kamar di dalam 1 satu bangunan, yang dapat dilengkapi dengan jasa pelayanan makan dan minum, kegiatan hiburan serta fasilitas lainnya . hotel juga merupakan sebuah akomodasi yang menggunakan sebagian atau seluruh bangunan dengan menyediakan jasa penginapan,",
+      "chunk_length": 472,
+      "token_count": 118
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_8",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 8,
+      "text": "luruh bangunan dengan menyediakan jasa penginapan, makanan dan minuman serta jasa penunjang lainnya bagi umum yang dikelola secara komersial. dalam pengertiannya hotel adalah suatu bentuk akomodasi beru a pelayanan penginapan kamar , makan dan minum serta fasilitas lainnya dengan membayar sesuai dengan pelayanan yang di berikan tanpa ada perjanjian antara kedua belah pihak. selain pelayanan yang sifatnya tidak nyata seperti senyum, keamanan, kenyamanan serta keramahan yang di berikan oleh karyawan hotel.",
+      "chunk_length": 509,
+      "token_count": 127
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_9",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 9,
+      "text": "rta keramahan yang di berikan oleh karyawan hotel. sejarah hotel. hotel berasal dari kata hostel, konon diambil dari bahasa perancis kuno. bangunan publik ini sudah disebut -sebut sejak akhir abad ke -17. yang maknanya kira-kira, tempat penampungan buat pendatang atau bisa juga bangunan penyedia pondokan dan makanan untuk umum . jadi, pada mulanya hotel memang diciptakan untuk meladeni masyarakat. l unberg, donald e., the hotel and restaurant bussiness, boston chaners books, 1974.",
+      "chunk_length": 485,
+      "token_count": 121
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_10",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 10,
+      "text": "restaurant bussiness, boston chaners books, 1974. isbn 0-8436 -2044 -7 tak aneh kalau di inggris dan amerika, yang namanya pegawai hotel dulunya mirip pegawai negeri alias abdi masyarakat. tapi, seiring perkembangan zaman bertambahnya pemakai jasa, layanan inap -makan ini mulai meninggalkan misi sosialnya. tamu pun dipungut bayaran, sementara bangunan dan kamar -kamarnya mulai ditata sedemikian rupa agar membuat tamu betah. meskipun demikian, bertahun -tahun standar layanan ho tel tak banyak berubah.",
+      "chunk_length": 505,
+      "token_count": 126
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_11",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 11,
+      "text": "-tahun standar layanan ho tel tak banyak berubah. 2 2 sampai di tahun 1793, saat city hotel dibangun di cikal bakal wilayah kota new york. city hotel itulah pelopor pembangunan penginapan gaya baru yang lebih fashionable. sebab, dasar pembangunannya yang tak han ya mementingkan letak yang strategis. tapi juga pemikiran bahwa hotel jugatempat istirahat yang mumpuni. jadi, tak ada salahnya didirikan di pinggir kota.",
+      "chunk_length": 417,
+      "token_count": 104
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_12",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 12,
+      "text": "jadi, tak ada salahnya didirikan di pinggir kota. setelah itu, muncul hotel -hotel legendaris seperti treamont house boston, 1829 yang selama puluhan tahun dianggap sebagai tempat paling top di amerika serikat as . treamont house bersaing ketat dengan astor house, yang dibangun di new york, 1836. saat itu, hotel modern identik dengan perkembangan lalu lintas dan tempat beristirahat. saat pembangunan ja ringan kereta api sedang gencar -gencarnya, hampir di tiap perhentian stasiun ada hotel. 1.",
+      "chunk_length": 497,
+      "token_count": 124
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_13",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 13,
+      "text": "a, hampir di tiap perhentian stasiun ada hotel. 1.3 bagian penyediaan makanan dan minuman 1.3.1 pengertian bagian makanan dan minuman adalah bagian dari hotel yang mengurus dan bertanggung jawab terhadap kebutuhan pelayanan makanan dan minuman serta kebutuhan lain yang terkait dari para tamu yang tinggal maupun yang tidak tinggal di hotel tersebut dan dikelola secara komersial serta pro fessional. bagian ini merupakan bagian yang sangat mutlak diperlukan oleh hotel dalam penyediaan dan pelayanan makanan dan",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_14",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 14,
+      "text": "h hotel dalam penyediaan dan pelayanan makanan dan minuman. 1.3.2 tujuan 1. menjual makanan dan minuman sebanyak -banyaknya kepada tamu dengan harga yang sesuai. 2. memberikan pelayanan sebaik -baiknya kepada tamu sehingga tamu merasa puas. hal ini menyangkut mutu pelayanan mutu makanan dan minuman, sikap karyawan, dekorasi ruangan serta suasana sekitar, peralatan yang dipakai dan sanitasi. 3. mendapatkan keuntungan sebesar -besarnya dan untuk kesinambungan usaha. 1.",
+      "chunk_length": 471,
+      "token_count": 117
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_15",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 15,
+      "text": "ebesar -besarnya dan untuk kesinambungan usaha. 1.4 pengertian kitchen dapur dapur adalah suatu ruangan atau tempat khusus yang memiliki 3 perlengkapan dan peralatan untuk mengolah makanan hingga siap untuk disajikan. disebutkan juga pengertian dapur atau kitchen sebagai berikut kitchen is a room or other spaces as a wall area of special building with facilities for cooking dengan singkat dikatakan bahwa sebuah dapur adalah suatu ruangan atau te mpat khusus yang memiliki perlengkapan dan peralatan untuk men",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_16",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 16,
+      "text": "yang memiliki perlengkapan dan peralatan untuk mengolah makanan dengan ciri -ciri sebagai berikut 1. ruangan dapur terpisah dari ruangan lainnya. 2. lantai dibuat dari bahan yang kedap air dan tidak licin. 3. tembok dapur atau kitchen dilapisi dengan bahan kedap air, mudah untuk dibersihkan dari lantai sampai plafon. 4. plafon dibuat datar dengan bahan cerah. 5. memiliki penerangan yang cukup dan mampu menerangi ke segala arah.",
+      "chunk_length": 431,
+      "token_count": 107
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_17",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 17,
+      "text": "gan yang cukup dan mampu menerangi ke segala arah. dapur juga memiliki beberapa fungsi yang sebagaimana kita ketahui fungsi dapur secara umum. dari pengertian dapur di atas disimpulkan bahwa fungsi kitchen atau dapur adalah 1. tempat mengolah makanan mulai dari bahan dasar sampai makanan siap untuk dihidangk an. 2. dapur dan makanan adalah sarana promosi untuk memperkenalkan budaya bangsa melalui seni kuliner khas daerah bangsa ke internasional. 3.",
+      "chunk_length": 452,
+      "token_count": 113
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_18",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 18,
+      "text": "ni kuliner khas daerah bangsa ke internasional. 3. mengelolah makanan yaitu memulai memproses bahan makanan hingga siap disajikan 4. melahirkan kreatifitas seni dalam menamp ilkan makanan, sehingga menjadi lebih menarik 1.5 pengertian standar operasional prosedur standar operasional prosedur atau disingkat dengan sop adalah dokumen yang berkaitan dengan prosedur yang dilakukan secara kronologis untuk menyelesaikan suatu pekerjaan yang bertujuan untuk memperoleh hasil kerja yang paling efektif dari para peke",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_19",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 19,
+      "text": "leh hasil kerja yang paling efektif dari para pekerja dengan biaya yang serendah -rendahnya. sop juga dapat dikatakan sebagai acuan atau pedoman untuk melakukan pekerjaan atau tugasnya sesuai dengan fungsi dan al at penilaian kinerja para karyawan sesuai indikator -indikator administrasi, teknik dan prosedural berdasarkan tata kerja, sistem kerja dan prosedur kerja pada unit kerja yang berkaitan. muchsinin riadi 2016. jakarta a.",
+      "chunk_length": 432,
+      "token_count": 108
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_20",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 20,
+      "text": "a yang berkaitan. muchsinin riadi 2016. jakarta a. tujuan standar operasional prosedur sop secara umum tujuan dari sop adalah untuk agar petugas pegawai menjaga konsistensi dan tingkat kinerja petugas pegawai atau tim dalam organisasi atau unit kerja. agar mengetahui dengan jelas peran dan fungsi tiap -tiap posisi dalam organisasi 5 memp erjelas alur tugas, wewenang dan tanggung jawab dari petugas pegawai terkait.",
+      "chunk_length": 417,
+      "token_count": 104
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_21",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 21,
+      "text": "g dan tanggung jawab dari petugas pegawai terkait. melindungi organisasi unit kerja dan petugas pegawai dari malpraktek atau kesalahan administrasi lainnya. untuk menghindari kegagalan atau kesalahan, keraguan, duplikasi dan inefisiensi. b. fungsi standar operasional prosedur sop berikut adalah fungsi dari standar operasional prosedur sop memperlancar tugas petugas pegawai atau tim unit kerja. sebagai dasar hukum bila terjadi penyimpangan. mengetahui dengan jelas hambatan -hambatannya dan mudah dilacak.",
+      "chunk_length": 508,
+      "token_count": 127
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_22",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 22,
+      "text": "gan jelas hambatan -hambatannya dan mudah dilacak. mengarahkan petugas pegawai untuk sama -sama disiplin dalam bekerja. sebagai pedoman dalam melaksanakan pekerjaan rutin. c. manfaat dan kegunaan standar operasional prosedur sop setelah mengetahui pengertian dan fungsi sop, simaklah manfaat dan kegunaan standar operasional prosedur sop sop yang baik akan menjadi pedoman bagi pelaksana, menjadi alat komunikasi dan pengawasan dan menjadikan pekerjaan diselesaikan secara konsisten para pegawai akan lebih memil",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_23",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 23,
+      "text": "kan secara konsisten para pegawai akan lebih memiliki percaya diri dalam bekerja dan tahu apa yang harus dicapai dalam setiap pekerjaan. sop juga bisa dipergunakan sebagai salah satu alat trainning dan bisa digunakan untuk mengukur kinerja pegawai. manfaat standar operasional prosedur sop menurut permenpan no. per 21 m -pan 11 2008 adalah sebagai standarisasi cara yang dilakukan pegawai dalam menyelesaikan pekerjaan khusus, mengurangi kesalahan dan kelalaian.",
+      "chunk_length": 463,
+      "token_count": 115
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_24",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 24,
+      "text": "erjaan khusus, mengurangi kesalahan dan kelalaian. sop membantu staf menjadi lebih mandiri dan ti dak tergantung pada intervensi manajemen, sehingga akan mengurangi keterlibatan pimpinan dalam pelaksanaan proses sehari -hari. meningkatkan akuntabilitas dengan mendokumentasikan tanggung jawab khusus dalam melaksanakan tugas. menciptakan ukuran standar ki nerja yang akan memberikan pegawai. cara konkret untuk memperbaiki kinerja serta membantu mengevaluasi usaha yang telah dilakukan.",
+      "chunk_length": 486,
+      "token_count": 121
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_25",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 25,
+      "text": "membantu mengevaluasi usaha yang telah dilakukan. menciptakan bahan -bahan training yang dapat membantu pegawai baru untuk cepat melakukan tugasnya. menunjukkan kinerja bahwa organisasi efisien dan dikelola dengan baik. menyediakan pedoman bagi setiap pegawai di unit pelayanan dalam melaksanakan pemberian pelayanan sehari -hari. menghindari tumpang tindih pelaksanaan tugas pemberian pelayanan. membantu penelusuran terhadap kesalahan -kesalahan prosedural dalam memberikan pelayanan.",
+      "chunk_length": 486,
+      "token_count": 121
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_26",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 26,
+      "text": "-kesalahan prosedural dalam memberikan pelayanan. menjamin proses pelayanan tetap berjalan dalam berbagai situasi. bab i i gambaran umum 2.1 sejarah singk at hotel sang surya hotel sang surya yang terletak di jalan sultan hasanuddin bintarore adalah salah satu unit usaha universitas muhammadiyah bulukumba, yang pada awalnya bernama wisma sang surya. perubahan nama tersebut dari wisma ke hotel resmi pada tanggala 10 juli 2018.",
+      "chunk_length": 429,
+      "token_count": 107
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_27",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 27,
+      "text": "i wisma ke hotel resmi pada tanggala 10 juli 2018. hotel sang surya memiliki bangunan 2 lantai yaitu lantai 1 memiliki kamar tidur yang luasnya 4 x 4 m, aula 3 x 7 m, ruang makan 6 x 8 m, ruang dapur 3 x 6 m dan resepsionis 3 x 4 m. sedangkan lantai ii memiliki 12 kamar tidur yang luasnya 4 x 4 m, 2.2 fasilitas hotel fasilitas hotel, antara lain a. air condit ioning ac setiap kamar b. tv setiap kamar c. closet duduk setiap kamar d. air panas dan dingin setiap kamar e.",
+      "chunk_length": 472,
+      "token_count": 118
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_28",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 28,
+      "text": "tiap kamar d. air panas dan dingin setiap kamar e. kran shower dan karan cebok setiap kamar f. handuk, sabun mandi dan air mineral 2 botol setiap kamar g. sarapan pagi h. jaringan wifi gratis i. tempat parkir yang cuku p luas, gratis j. alat pengintai cctv 8 titik tabel tipe kamar dan lokasi lainnya yang terdapat di hotel sang surya universitas muhammadiyah bulukumba no ruangan lokasi jumlah ukuran 1 bangunan 2 lantai 2 kamar 20 4 x 4 m 3 ruang recepsionis 1 3 x 4 m 4 ruang makan 1 6 x 8 m 5 aula 1 3 x 7 m",
+      "chunk_length": 511,
+      "token_count": 127
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_29",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 29,
+      "text": "3 x 4 m 4 ruang makan 1 6 x 8 m 5 aula 1 3 x 7 m 6 mushalla 1 4 x 6 m 6 taman 7 lokasi parkir motor 8 lokasi parkir mobil 9 dapur 1 3 x 6 m 10 loby 1 3 x 4 m hotel sang surya dilengkapi dengan fasilitas fasilitas yang dibutuhkan selama tamu menginap di hotel tersebut, antara lain sebagai berikut 1. fasilitas kamar room fasilitas kamar, antara lain a. tv flat 24 dengan 45 channel b. slipper sandal c. bantal extra d. dispenser e. gelas, cangkir, pengaduk f. air mineral g. gula, kopi, teh h.",
+      "chunk_length": 493,
+      "token_count": 123
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_30",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 30,
+      "text": "kir, pengaduk f. air mineral g. gula, kopi, teh h. ac air conditioner i. wifi 1. fasilitas kamar mandi bath room fasilitas kamar mandi, antara lain a. handuk b. sabun 30 gr c. air panas dan dingin d. toilet e. shower 10 2.3 struktur organisasi stuktur organisasi hotel sang surya penasehat penanggung jawab manager recepsionis cleaning service security 11 2.4 job discription adapun job description di setiap masing -masing departement antara lain a. penasehat 1.",
+      "chunk_length": 463,
+      "token_count": 115
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_31",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 31,
+      "text": "ng -masing departement antara lain a. penasehat 1. memberikan arah kebijakan, masukan, nasehat dan pertimbangan - pertimbangan dalam suatu ide atau program dalam pengembangan yayasan. 2. sebagai penampung aspirasi dalam usaha -usaha pengembangan hotel sang surya. b. penanggung jawab 1. memberikan saran, kritik, serta ide ide. 2. mencari solusi serta menyelesaikan bila terjadi permasalahan. 3. bertanggungjawab atas kegiatan yang dilaksanakan. c.",
+      "chunk_length": 448,
+      "token_count": 112
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_32",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 32,
+      "text": "rtanggungjawab atas kegiatan yang dilaksanakan. c. manager manager merupakan fungsi jabatan kerja pada sebuah perusahaan yang bertugas memimpin, mengelola dan mengkoordinasikan semua hal yang berkaitan jalannya roda perusahaan. berikut ini tugas dan tanggung jawab general manager 1. mengobservasi dan memonitor penampilan karyawan untuk memastikan bahwa aturan -aturan dan prosedur hotel telah dilaksanakan 2. bekerjas ama dengan manajer -manajer departemen lain untuk mengkoordinasi aktivitas hotel. 3.",
+      "chunk_length": 504,
+      "token_count": 126
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_33",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 33,
+      "text": "emen lain untuk mengkoordinasi aktivitas hotel. 3. membuat keputusan dan membuat rencana cara mengatur hotel. 4. memberi keterangan mengenai pelayanan yang baik yang ada di hotel. 5. mengatur dan menjawab telpon jika sangat diperluk an, mengirim surat dan memberi keterangan kepada tamu tentang area hotel. 6. melakukan interview mengenai kemampuan kerja staff untuk menduduki posisi yang tepat. 7. menganalisi keuangan hotel yang di pimpin olehnya. 8.",
+      "chunk_length": 452,
+      "token_count": 113
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_34",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 34,
+      "text": "ganalisi keuangan hotel yang di pimpin olehnya. 8. melakukan komunikasi yang baik dengan manajer -manajer lainnya 9. serta departemen masing -masing bagian agar dapat bekerja sama dengan baik. 10. memutuskan dan membuat kebijakan untuk kemajuan perusaahan 12 11. memonitor dsn mengawasi hotel serta bertanggung jawa b atas semua kelancaran operasional hotel. 12. merencanakan dan mengontrol kebijakan perusahaan agar dapat berjalan dengan maksimal. d. recepsionis 1.",
+      "chunk_length": 466,
+      "token_count": 116
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_35",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 35,
+      "text": "dapat berjalan dengan maksimal. d. recepsionis 1. menjembatani informasi antara manajemen hotel dan tamu. 2. melayani tamu hotel yang berkunjung. 3. bersiap dan menunggu tamu di meja lobi hotel. 4. mencatat data tamu yang berkunjung setiap hari. 5. menentukan strategi dan sikap ketika tamu yang datang melakukan hal tak terduga. e. cleaning service tugas dan tanggung jawab a. melakukan pembersihan area kerja. b. membina suasana kerja yang sehat. c. melaporkan kebutuhan repair maintance. d.",
+      "chunk_length": 493,
+      "token_count": 123
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_36",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 36,
+      "text": "ehat. c. melaporkan kebutuhan repair maintance. d. menghadiri briefing chief steward atau supervisor. e. bertanggung jawab untuk pemeliharaan kebersihan peralatan yang beredar. f. menangani penataan, pengadaan dan pengaturan atas instruksi steward supervisor. g. menangani perawatan, penyimpanan dan distribusi peralatan. f. security j. mengadministrasikan dan meninjau operasi untuk memastikan lingkungan yang aman dan aman bagi karyawan, tamu, dan lain -lain. k.",
+      "chunk_length": 464,
+      "token_count": 116
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_37",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 37,
+      "text": "n dan aman bagi karyawan, tamu, dan lain -lain. k. menyarankan manajemen dalam meningkatkan dan melaksanakan kebijakan sesuai dengan keamanan dan peraturan negara. 2.5 hubungan antar bagian untuk keberhasilan tugas masing -masing seksi, maka pembina hubungan dan kerja sama yang baik dan terpadu sangat di perlukan. seksi pembersihan peralatan stewarding sangat menunjang kelancaran operasi dalam membersihkan dan menyiapkan peralatan pelayanan makanan dan minuman.",
+      "chunk_length": 465,
+      "token_count": 116
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_38",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 38,
+      "text": "enyiapkan peralatan pelayanan makanan dan minuman. dalam hal -hal tertentu, kerjasama dan saling membantu antar seksi -seksi lainnya sangat diperlukan guna kelancaran operasi di seksi -seksi pada khususnya untuk pencapaian tujuan hotel pada umumnya. semua itu perlu demi kelancaran kerja dan agar situasi lebih menyenangkan. hubungan k erja yang dimaksud antara lain a. bagian dapur setiap pesanan yang berupa makan dibuat di dapur.",
+      "chunk_length": 432,
+      "token_count": 108
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_39",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 39,
+      "text": "setiap pesanan yang berupa makan dibuat di dapur. cepat atau lambat, puas atau tidaknya para tamu atas pelayanan makanan yang disajikan sangat berpengaruh oleh bagian dapur. b. kasir kasir adalah bagian yang memberi bill harga kepada tamu, menerima uang pembayaran dari tamu, memberikan kembaliannya, membuat laporan hasil penjualan minuman, makanan, dan memberikan laporan terhadap hasil penjualan secara keseluruhan.",
+      "chunk_length": 418,
+      "token_count": 104
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_40",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 40,
+      "text": "poran terhadap hasil penjualan secara keseluruhan. kasir menyediakan bill untuk tamu yang kemudian diantar oleh waiter waitress pada saat tamu selesai menghidangkan makanannya. c. pengadaan peralatan bagian yang bertugas di bagian pengadaan peralatan, baik, untuk k e perluan dapur maupun kamar bab iii pembahasan 3.1 gambaran umum standar operasional prosedur dapur hotel sang surya seorang staff pada dasarnya harus memahami dan mengerti standar operasional prosedur yang diterapkan pada perusahaan khususnya d",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_41",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 41,
+      "text": "osedur yang diterapkan pada perusahaan khususnya di hotel sang surya. hal ini sangat penting untuk semua proses yang dilakukan. dan hal ini juga sama yang dilakukan pada staff yang ada di hotel sang surya, agar bisa mendapatkan hasil dan kualitas yang bagus pada pekerjaan yang dilakukan oleh staf dalam membuat menu -menu yang akan disajikan kepada tamu hotel. di setiap kegiatan pengolahan makanan tentu memiliki prosedur dalam tahap pembuatan makanan untuk tamu yang akan disajikan.",
+      "chunk_length": 485,
+      "token_count": 121
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_42",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 42,
+      "text": "pembuatan makanan untuk tamu yang akan disajikan. taha p dalam pembuatan makanan sendiri harus selalu diawasi oleh kepala kitchen itu sendiri executive chef agar makanan atau produk yang dihasilkan bebas dari kontaminasi benda lain atau bersih hygiene. tahapan pembuatan makanan tersebut biasanya diawali pada bagian butcher tempat pemotongan daging. pemotongan daging biasanya selalu diawasi oleh kepala kitchen mulai dari bentuk potongan,",
+      "chunk_length": 440,
+      "token_count": 110
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_43",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 43,
+      "text": "si oleh kepala kitchen mulai dari bentuk potongan, ukuran dan bagian daging yang akan diambil untuk proses pembuatan makanan tertentu. setalah itu daging akan dibawa untuk dic uci bersih oleh staff kitchen sebelum digunakan atau dimasak untuk menjadi sebuah makanan atau produk yg akan di jual kepada tamu. berikut prosedur dalam kitchen menurut silawankerto 1. sumber bahan makanan verifikasi bahan makanan. periksa kondisi barang saat penerimaan setiap hari. di cuci sampai bersih sebelum di simpan di chiller.",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_44",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 44,
+      "text": "i cuci sampai bersih sebelum di simpan di chiller. bahan makanan untuk penggunaan pribadi harus diberi label st . 2. kontainer kaleng penyok dalam kondisi apapun tidak bolah digunakan. label dan pisahkan makanan untuk dikembalik an ke pemasok 3. pembusukan pada makanan 15 makanan harus bebas dari pembusukan, termasuk yang diamati oleh visual, bau atau rasa isyarat. hal yang perlu diperhatikan adalah pembususkan karakteristik produk misalnya dari warna, bau dan kelenturan.",
+      "chunk_length": 476,
+      "token_count": 119
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_45",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 45,
+      "text": "ik produk misalnya dari warna, bau dan kelenturan. cetakan pada buah -buahan atau sayuran. ikan dengan mata cekung permukaan berlendir dan bau. 4. tidak kontaminasi makanan tidak boleh memiliki kotoran apapun, hal yang harus diperhatikan jelas visual yang kotoran, bagian serangga atau kotoran. kontaminasi bahan kimia atau bahan asing. makanan yang tidak dapat diterima harus segera ditolak atau dimusnahkan. sumber silawankerto surabaya 2013.",
+      "chunk_length": 444,
+      "token_count": 111
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_46",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 46,
+      "text": "au dimusnahkan. sumber silawankerto surabaya 2013. berdasarkan pengamatan yang dilakukan oleh penulis ketika melakukan praktek kerja lapangan, ada beberapa poin dar i 4 empat tahapan prosedur diatas yang masih belum dilaksanakan oleh pihak kitchen sebagaimana yang seharusnya dilakukan dan di terapkan di lapangan kerja, sebagai contoh pada tahap nomor satu penulis sering menemukan bahan makanan atau buah yang berada d i dalam chiller masih dalam keadaan kurang bersih yang berarti masih kurangnya pengamatan y",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_47",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 47,
+      "text": "g bersih yang berarti masih kurangnya pengamatan yang dilakukan pada saat proses pencucian buah dan sayur yang akan di simpan di chiller. hal ini berarti bisa di simpulkan bahwa penerapan sop dalam kegiatan pada sta ff kitchen masih kurang teliti dalam proses penerapannya. di sisi 16 lain para trainee juga akan di bingungkan oleh keadaan tersebut karena belum mendapatkan arahan lebih dari para seniornya di kitchen dan dihadapkan pada dua pilihan antara melaporkan kondisi bahan terlebih dahulu kepada senior",
+      "chunk_length": 511,
+      "token_count": 127
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_48",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 48,
+      "text": "orkan kondisi bahan terlebih dahulu kepada senior atau langsung mengambil dan mencuci serta langsung mengolah bahan tersebut. dalam hal ini dapat ditegaskan bahwa pengawasan dari kepala kitchen sangat penting dib utuhkan agar sop bisa terealisasi dengan baik dalam proses penerapannya dan kegiatan kerja dapat berjalan dengan lancar. 3.2 pentingnya menerapkan standar operasional prosedur pada hotel sang surya keberadaan sop standard operas ional prosedur sangat penting sbagi operasional perusahaan khususnya h",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_49",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 49,
+      "text": "t penting sbagi operasional perusahaan khususnya hotel, dengan sop perusahaan bisa mengantisipasi berbagai situasi yang mungkin terjadi dalam menjalankan kegiatan pekerjaan dan pelatiham training . sop akan memberikan arah bagi st aff perusahaan dalam menjalankan pekerjaannya seperti halnya kegiatan training. dengan adanya sop ini karyawan hotel sheraton senggigi brach resort akan mengetahui ruang lingkup ini, maka job description akan jelas dan tidak tumpang tindih,",
+      "chunk_length": 471,
+      "token_count": 117
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_50",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 50,
+      "text": "b description akan jelas dan tidak tumpang tindih, dengan demikian maka staff perusahaan akan terjaga dengan baik. sop atau standar operating procedure, adalah system atau prosedur yang disusun untuk memudahkan, merapihkan dan menertibkan pekerjaan. sistem ini ini berisi urutan proses pekerjaan mulai dari awal sampai akh ir. perusahan yang telah memahami kebutuhan suatu standar acuan, agar para karyawan dapat memahami dan melakukan tugasnya sesuai standar yang di gariskan perusahaan,",
+      "chunk_length": 488,
+      "token_count": 122
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_51",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 51,
+      "text": "gasnya sesuai standar yang di gariskan perusahaan, menyadari akan pentingnya sop ini. bahkan perusahaan juga membuat sop untuk produk yang di keluarkan oleh perusahaan tersebut, agar para konsumen dapat mengetahui cara menggunakan produk tersebut tanpa salah. 17 sop atau standar operasional prosedur, yang harus di terapkan oleh hotel harus sangat di prioritaskan untuk kelanc aran kegiatan pekerjaan, tujuannya adalah untuk peningkatan pelayanan yang akan diberikan kepada tamu dan juga kelancaran operasional",
+      "chunk_length": 511,
+      "token_count": 127
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_52",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 52,
+      "text": "rikan kepada tamu dan juga kelancaran operasional kerja yang ada di hotel sheraton senggigi beach resort. untuk kegiatan training sendiri juga perlu menerapkan sop, hal ini dimaksud agar pada saat melakukan pekerjaan para trainee di hotel sheraton senggigi beach resort sudah mengerti dan bisa menjalankan tugasnya masing -masing dengan baik tanpa harus diarahkan dan di tegur oleh senior atau karyawan hotel yang bekerja di bagi an food beverage product,",
+      "chunk_length": 455,
+      "token_count": 113
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_53",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 53,
+      "text": "tel yang bekerja di bagi an food beverage product, maka dari itu sebelum melakukan atau memulai pekerjaannya di dapur, setiap trainee akan diberi pengarahan dan pembelajaran mengenai sop tersebut baik itu manfaat, tujuan dan pentingnya pemahaman mereka mengenai pentingnya sop da lam kegiatan pelatihan saat breafing. pada saat diberikan pengarahan setiap trainee akan diberikan informasi mengenai pemberlakuan sop dalam kegiatan pelatihan, baik itu standar dalam melayani tamu, penggunaan waktu, kebersihan,",
+      "chunk_length": 508,
+      "token_count": 127
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_54",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 54,
+      "text": "dalam melayani tamu, penggunaan waktu, kebersihan, dan terutama adalah untuk kelancaran operasional kerja termasuk juga pelatihan yang dilakukan di hotel sheraton senggigi beach resort. jika semua hal tersebut sudah bisa diterapkan dengan baik maka operasional kerja akan berjalan dengan sangat baik dan tentunya akan menunjang kuali tas kerja yang dilakukan oleh karyawan hotel sheraton maupun trainee yang sedang melakukan pelatihan training . 3.",
+      "chunk_length": 448,
+      "token_count": 112
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_55",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 55,
+      "text": "inee yang sedang melakukan pelatihan training . 3.3 pengaruh standar operasional prosedur dalam kegiatan training setiap perusahaan boleh memilih dan menentukan bagaimana dan seperti apa standar operasional prosedur yang berlaku pada perusahaannya, seperti hotel, kantor dan sebagainya. standard operasional prosedur sop merupakan hal mutlak. pengaruh sop sendiri sangatlah besar dalam hal pekerjaan maupun pelatihan atau training,",
+      "chunk_length": 431,
+      "token_count": 107
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_56",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 56,
+      "text": "alam hal pekerjaan maupun pelatihan atau training, dan itu juga mer upakan hal wajib yang harus di terapkan dalam perusahaan termasuk hotel. 18 dengan adanya sop tingkat kualitas karyawan di hotel sang surya menjadi lebih baik lagi. standar operasional mendukung karyawan dalam mengerjakan tugas dan tanggung jawabnya, begitupun dengan para trainee yang sedang dalam masa pelatihan bisa lebih mengerti dan mengetahui apa yang dimaksud dengan sop dan mereka bisa b ekerja dengan baik membantu pekerjaan yang dilak",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_57",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 57,
+      "text": "b ekerja dengan baik membantu pekerjaan yang dilakukan oleh senior. dengan mengetahui sop tersebut mereka bisa lebih memhami bagaimana cara kerja di hotel dan juga tidak bekerja asalan dan yang penting jadi. sop sendiri sangat penting adanya, pun dalam kegia tan training. karena setiap pekerjaan pasti memiliki standarnya masing -masing termasuk dalam kegiatan training sekalipun, berikut beberapa standar yang harus diperhatikan oleh para trainee sebagai berikut a.",
+      "chunk_length": 467,
+      "token_count": 116
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_58",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 58,
+      "text": "diperhatikan oleh para trainee sebagai berikut a. standar kebersihan kebersihan adalah salah satu faktor penting dalam sebuah pekerjaan apalagi yang berhubungan dengan makanan yang berkontaminasi langsung dengan tangan pembuat. teruntuk para trainee hal ini harus sangat diperhatikan dalam proses pembuatan makanan yang akan disajikan kepada tamu hotel, sedikit kelalaian saja maka akan berakibat fatal bagi trainee dan karyawan dan khususnya bagi hotel itu sendiri apabila terdapat hal seperti kebersihan makan",
+      "chunk_length": 511,
+      "token_count": 127
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_59",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 59,
+      "text": "diri apabila terdapat hal seperti kebersihan makanan yang disajikan dan diketahui oleh tamu yang menghidangkan makanan tersebut maka otomatis akan me ndapat komplain dari tamu dan nama hotel bisa saja tercoreng. b. standar waktu pembuatan makanan standar waktu juga harus diperhatikan oleh trainee maupun karyawan hotel dalam proses pembuatan makanan, karena jika waktu pembuatan memakan waktu yang cukup lama maka bisa dipastikan tamu akan merasa jenuh dan sewaktu -waktu bisa membatalkan pesananya dan hal ini",
+      "chunk_length": 511,
+      "token_count": 127
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_60",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 60,
+      "text": "ktu -waktu bisa membatalkan pesananya dan hal ini bisa membuat hotel rugi. c. standar pelayanan khusus untuk pegawai hotel yang menyajikan makanan kepada tamu, standar pelayanan juga harus diperhatikan dan harus selalu diberikan kepada tamu yang datang ke ruang makan untuk membeli produk makanan yang dijual. memberikan pelayanan dengan mutu yang baik merupakan salah satu cara yang paling menentukan keberhasilan dan harus didukung dengan kelengkapan fasilitas tersebut.",
+      "chunk_length": 472,
+      "token_count": 118
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_61",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 61,
+      "text": "us didukung dengan kelengkapan fasilitas tersebut. restaurant dalam menjalankan usahanya dalam bidang pelayanan makan minum harus terus berupaya untuk meningktakan kualitas dalam pelayanannya demi mencapai kepuas an tamu. bab iv standar operasional prosedur sop hotel sang surya 4.1 sop petugas depan resepsionis a. reservasi melalui telepon suraian reservasi telepon seperti di bawah ini greeting ke tamu, sesuai dengan waktu saat menerima telepon. menanyakan nama tamu secara lengkap.",
+      "chunk_length": 486,
+      "token_count": 121
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_62",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 62,
+      "text": "rima telepon. menanyakan nama tamu secara lengkap. menanyakan tipe kamar dan berapa hari tamu akan menginap. memberikan harga kamar kepada tamu apabila harga telah disepakati maka proses reservasi dilanjutkan. meminta nomor telepon tamu. menjelaskan ke tamu tentang prosedur reservasi dan prosedur pembatalan reservasi secara lengkap dan benar. menutup pembicaraan telepon dengan greeting, ucapan terima kasih dan tak lupa menyebutkan nama tamu tersebut.",
+      "chunk_length": 454,
+      "token_count": 113
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_63",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 63,
+      "text": "kasih dan tak lupa menyebutkan nama tamu tersebut. menuliskan detail di formulir reservasi, sesuai tanggal dan bulannya. b. persiapan sebelum tamu check in bersihkan dan rapikan area sekitar depan hotel dan area lobby. siapkan semua data-data dan kelengkapan reservasi dan registrasi yang dibutuhkan print out semua data-data pemesan kamar hotel mempersiapkan dan meminta tanda tangan manajer sebagai sambutan manajemen hotel check kelengkapan fasilitas kamar dan meletakkan surat selamat datang yang sudah ditan",
+      "chunk_length": 512,
+      "token_count": 128
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_64",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 64,
+      "text": "n meletakkan surat selamat datang yang sudah ditandatangani di meja tulis dalam kamar yang sesuai. siapkan kunci kamar tamu yang akan check -in. c. tamu check in bagaimana kita akan memperlihatkan keramah tamahan hotel kita dalam melayani tamu yang menjadi pokok utama yang harus disiapkan, dan pemilihan kata tersantun yang kita punya dalam memberikan penjelasan yang akurat dan benar tanpa mengada -ada dan juga menjadi sebuah referensi bagi hotel tersebut.",
+      "chunk_length": 459,
+      "token_count": 114
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_65",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 65,
+      "text": "juga menjadi sebuah referensi bagi hotel tersebut. adapun tata caranya seperti dibawah ini sambut tamu di depan hotel dan ucapkan selamat datang. membawakan tas koper tamu ke lobby. mempersilahkan tamu untuk duduk. 21 jelaskan dan informasikan kepada tamu tentang service dan fasilitas hotel. jelaskan dan informasikan kepada tamu layanan penyediaan makanan dan minuman jelaskan dan informasikan kepada tamu tentang aktifitas dan fasilitas di hotel sang surya d.",
+      "chunk_length": 462,
+      "token_count": 115
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_66",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 66,
+      "text": "ang aktifitas dan fasilitas di hotel sang surya d. registrasi registrasi adalah hal yang sangat penting dalam memadukan antara booking yang sudah ada dengan booking berdasarkan sumber baik itu online ataupun offline booking, registrasi ini dibutuhkan sebagai tanda bahwa tamu pernah menginap di hotel tersebut, dan mungkin akan ada ditemukan secarik kata yang merupakan term dan kondisi atau juga aturan dalam rangka tamu menginap,",
+      "chunk_length": 431,
+      "token_count": 107
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_67",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 67,
+      "text": "ndisi atau juga aturan dalam rangka tamu menginap, hal ini diberikan untuk memberikan protek jika terjadi sesuatu yang tidak diinginkan dalam ruang lingkup perhotelan. langkah -langkahnya sebagai berikut menyerahkan form ulir registrasi untuk dilengkapi oleh tamu. meminta kartu identitas tamu untuk di foto copy. mempersilahkan kepada tamu untuk mengisi form ulir registrasi dengan lengkap. tamu dan resepsionis harus menanda -tangani form ulir registrasi yang telah lengkap diisi.",
+      "chunk_length": 482,
+      "token_count": 120
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_68",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 68,
+      "text": "ani form ulir registrasi yang telah lengkap diisi. menyimpan registrasi tamu di file petugas depan resepsionis sesuai dengan nomor kamar. mempersilahkan dan mengantar tamu ke kamar. membawa tas dan koper tamu ke kamar 4.2 sop persiapan kamar untuk tamu check in kamar tidur a. merapikan tempat tidur b. pastikan tempat tidur, sprei, selimut, pelindung tempat tidur, bantal, benar -benar bersih sesuai dengan standar kebersihan. c.",
+      "chunk_length": 430,
+      "token_count": 107
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_69",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 69,
+      "text": "-benar bersih sesuai dengan standar kebersihan. c. cek ac, tv, lampu, lemari pakaian dan membuat laporan masalah jika ada yang perlu diperbaiki. d. cek direktori kamar dan melaporkan ke kantor jika ada halaman yang robek atau kotor untuk diganti yang baru. e. bersihkan keranjang sampah kamar mandi a. membersihkan kaca cermin b. membersihkan wastafle wash basin c. membersihkan toilet, cek penyemprot air di toilet d. membersihkan kaca shower e. membersihkan shower dan dinding kamar mandi f.",
+      "chunk_length": 493,
+      "token_count": 123
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_70",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 70,
+      "text": "e. membersihkan shower dan dinding kamar mandi f. melengkapi handuk mandi, keset kamar mandi, dan sabun g. bersihkan keranjang sampah di kamar mandi mebel a. lap mebel dengan semir mebel b. bersih kan sarang laba-laba c. bersihkan kaca-kaca teras lap meja, kursi di teras lantai a. menyapu lantai kamar mandi, kamar tidur, teras b. jika banyak pasir gunakan vacum cleaner c. pell kamar mandi, kamar tidur, teras d. hiasi kamar mandi, kamar tidur dengan bunga e. rapikan korden f.",
+      "chunk_length": 479,
+      "token_count": 119
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_71",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 71,
+      "text": "ndi, kamar tidur dengan bunga e. rapikan korden f. gunakan pengharum ruangan bayfresh cek kembali untuk memastikan kamar benar -benar siap untuk tamu check in a. rapikan korden sesuai standar b. tutup dan kunci kembali pintu kamar c. informasikan bahwa kamar sudah siap untuk tamu check in 4.3 sop tamu check in a. greeting salam b. memb awa barang tamu ke kamar 4.4 membersihkan kamar tamu yang masih menginap occupied room a. greeting salam b.",
+      "chunk_length": 445,
+      "token_count": 111
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_72",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 72,
+      "text": "masih menginap occupied room a. greeting salam b. mengetuk pintu kamar dan greeting sebanyak tiga kali sebelum membuka pintu membersihkan tempat tidur a. mera pikan tempat tidur tamu dan barang -barang tamu b. ganti sprei, sarung bantal yang kotor 23 kamar mandi a. buang sampah yang ada di kamar mandi b. bersihkan kaca cermin di kamar mandi c. bersihkan washtafle di kamar mandi d. bersihkan toilet e. bersihkan kaca shower, di kran sower f. mengganti towel -towel kotor dengan towel yang bersih mebel a.",
+      "chunk_length": 506,
+      "token_count": 126
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_73",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 73,
+      "text": "wel -towel kotor dengan towel yang bersih mebel a. lap mebel di tempat tidur, di teras b. pastikan lampu kamar mandi, kamar tidur, dalam kondisi bagus c. cek ac, water hitter d. sapu lantai kamar mandi, di kamar tidur, dan te ras depan pell lantai kamar mandi, di kamar tidur, dan te ras, berikan pengharum ruangan a. cek kembali perlengkapan dan kebersihan kamar tamu sebelum meninggalkan kamar b. pastikan pintu benar -benar terkunci sebelum meninggalkan kamar 4.",
+      "chunk_length": 465,
+      "token_count": 116
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_74",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 74,
+      "text": "enar -benar terkunci sebelum meninggalkan kamar 4.5 sop membersihkan kamar tamu check out tamu cek out 1. membantu tamu membawa barang -barang ke depan lobby 2. periksa kembali kamar tamu check out 3. pastikan barang -barang tamu tidak tertinggal di kamar 4. apabila ada barang yang tertinggal setelah tamu pergi, segera laporkan ke resepsionis dicatat sebagai hilang dan ditemukan room 1. mengganti seprei, sarung duve, sarung bantal dengan yang baru ber sih 2. merapikan tempat tidur 3.",
+      "chunk_length": 488,
+      "token_count": 122
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_75",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 75,
+      "text": "gan yang baru ber sih 2. merapikan tempat tidur 3. membersihkan furniture di kamar dan te ras 4. membersihkan kaca -kaca 5. membersihkan dan melengkapi barang -barang di kamar mandi 6. memb ersihkan lantai kamar mandi, kamar tidur, teras 7. pastikan ac, water heater, lampu dalam posisi off 8. rapikan posisi korden 9. tutup pintu dan pastikan pintu kamar terkunci dengan baik 4.6 sop menyiapkan barang -barang kotor untuk laundry laundry kotor 24 menghitung pisahkan handuk kotor dengan seprei, sarung duve,",
+      "chunk_length": 508,
+      "token_count": 127
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_76",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 76,
+      "text": "pisahkan handuk kotor dengan seprei, sarung duve, sarung bantal yang kotor menghitung laundry bersih menghitung kembali laundry yang telah di bersihkan susun rapi di atas rak berdasarkan jenisnya 4.7 sop area publik lobby bersihkan lantai lobby lap furniture bersihkan meja kaca bersihkan asbak bersihkan sarang laba -laba ruang resepsionis bersihkan kantor lap meja, kursi, rak bersihkan tempat sampah bersihkan lantai, sapu, dan pell 4.8 standar operasional prosedur penyiapan sarapan pagi a.",
+      "chunk_length": 494,
+      "token_count": 123
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_77",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 77,
+      "text": "dar operasional prosedur penyiapan sarapan pagi a. perencanaan planning yang matang dimana seorang staff merencanakan menu untuk 1 minggu, dimana menu tersebut berputar setiap hari. b. mengorganisir staff main kitchen pada saat satu jam sebelum acara di mulai yang di pimpin oleh executive chef. c. mengadakan briefing apabila dalam menu terdapat kesulitan ataupun k endala dan harus di selesaikan pada saat briefing mensosialisasikan menu tersebut kepada bawahan . d.",
+      "chunk_length": 468,
+      "token_count": 117
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_78",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 78,
+      "text": "ensosialisasikan menu tersebut kepada bawahan . d. memeriksa semua peralatan yang akan digunakan pada saat sebelum di mulai pekerjaan. e. memriksa semua bahan makanan yang akan di pakai yang ada di dalam chille r maupun di freezer. f. membuat pemesanan barang apabila barang sudah habis di hotel sang surya sendiri sop dalam penyediaan sarapan pagi meliputi a. perkiraan jumlah tamu yang menginap di hotel agar menyesuaikan dengan penyediaan makanan untuk sarapan pagi b.",
+      "chunk_length": 471,
+      "token_count": 117
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_79",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 79,
+      "text": "an dengan penyediaan makanan untuk sarapan pagi b. penyiapan bahan makanan mulai dari telur, daging, ikan bumbu dapur, 25 sayuran, salad dan bahan pelengkap lainnya garnis . c. memasak menu yang akan disiapkan untuk perjamuan sarapan di pagi harinya. d. mempersiapkan segala sesuatu seperti menu yang telah di masak lalu diantarkan ke ruang makan e. melakukan mengisi ulang air minum, jus dan makanan yang telah habis untuk persiapan buat tamu yang datang setelah itu. f.",
+      "chunk_length": 471,
+      "token_count": 117
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_80",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 80,
+      "text": "uk persiapan buat tamu yang datang setelah itu. f. melakukan pembersihan ruang makan setelah j am perjamuan sarapan telah selesai. g. menyiapkan kembali bahan makanan yang akan digunakan untuk persiapan menu sarapan pagi besok harinya. 4.9 standar operasional prosedur penyediaan makanan dan minuman sumber bahan makanan verifikasi bahan makanan. periksa kondisi barang saat penerimaan setiap hari. di cuci sampai bersih sebelum di simpan di chiller.",
+      "chunk_length": 450,
+      "token_count": 112
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_81",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 81,
+      "text": "i cuci sampai bersih sebelum di simpan di chiller. bahan makanan untuk penggunaan pribadi harus diberi label st . kontainer kaleng penyok dalam kondisi apapun tidak bolah digunakan. label dan pisahkan makanan untuk dikembalikan ke pemasok pembusukan pada makanan makanan harus bebas dari pembusukan, termasuk yang diamati oleh visual, bau atau rasa isyarat. hal yang perlu diperhatikan adalah pembususkan karakteristik produk misalnya dari warna, bau dan kelenturan. cetakan pada buah -buahan atau sayuran.",
+      "chunk_length": 506,
+      "token_count": 126
+    },
+    {
+      "chunk_id": "SOP_Hotel_para_0_chunk_82",
+      "source_file": "SOP_Hotel",
+      "source_type": "text",
+      "paragraph_index": 0,
+      "chunk_index": 82,
+      "text": "elenturan. cetakan pada buah -buahan atau sayuran. ikan dengan mata cekung permukaan berlendir dan bau. tidak kontaminasi makanan tidak boleh memiliki kotoran apapun, hal yang harus diperhatikan jelas visual yang kotoran, bagian serangga atau kotoran. kontaminasi bahan kimia atau bahan asing. makaanan yang tidak dapat diterima harus segera ditolak atau dimusnahkan. lampiran -lampiran",
+      "chunk_length": 386,
+      "token_count": 96
+    }
+  ]
+}
