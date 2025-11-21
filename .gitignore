@@ -5,3 +5,4 @@ DataGlossary_ingest.xlsx
 dataIngestion.ipynb
 test_usage.py
 __pycache__/
+vectorstore/

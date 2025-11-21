@@ -168,16 +168,65 @@ myvenv\Scripts\activate        # Windows
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Configure Environment Variables
-Create a `.env` file in the project root:
+### Step 4: Configure Environment
 ```bash
-OPENAI_API_KEY=your_api_key_here
-QDRANT_URL=https://your-qdrant-instance
-GROQ_API_KEY=your_api_key_here
+# Copy template
+cp .env.example .env
+
+# Edit .env and add your Groq API key (FREE at https://console.groq.com)
+GROQ_API_KEY=gsk_your_key_here
 ```
 
-### 5️⃣ Run the App
+### Step 5: Start Qdrant Web UI (Optional)
+```bash
+# Windows
+./start_qdrant_server.bat
+
+# Linux/Mac
+bash start_qdrant_server.sh
+
+# Then update .env:
+QDRANT_MODE=server
+QDRANT_URL=http://localhost:6333
+```
+
+# Inspect database
+```bash
+python src/vectorstore/inspect_qdrant.py
+```
+
+### Step 6: Index Data Glossary
+```bash
+python src/ingestion/index_dataglossary.py
+```
+
+
+### Step 7: Index User Uploaded Files
+```bash
+python src/ingestion/index_user_upload.py
+```
+
+### Step 8: Test Everything
+```bash
+python test_embedding_retrieval.py
+```
+
+**Expected:** All 6 tests pass ✅
+
+
+### Step 9 Run the App
 
 ```bash
 streamlit run src/ui/app.py
 ```
+
+---
+
+## 💰 Our Setup
+
+| Component | Provider | Cost |
+|-----------|----------|------|
+| **Embeddings** | HuggingFace `all-mpnet-base-v2` | $0 |
+| **Vector DB** | Qdrant (local/server) | $0 |
+| **LLM** | Groq `llama-3.3-70b-versatile` | $0  |
+| **Total** | | **$0/month** 🎉 |
