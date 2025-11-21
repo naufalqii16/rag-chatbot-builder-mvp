@@ -200,7 +200,6 @@ python src/vectorstore/inspect_qdrant.py
 python src/ingestion/index_dataglossary.py
 ```
 
-
 ### Step 7: Index User Uploaded Files
 ```bash
 python src/ingestion/index_user_upload.py
