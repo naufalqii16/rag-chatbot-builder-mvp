@@ -1,5 +1,23 @@
-import streamlit as st
+"""
+RAG Chatbot Streamlit App
+--------------------------
+Interactive UI for RAG-powered Q&A system.
+"""
 
+import streamlit as st
+import sys
+from pathlib import Path
+
+# Add parent directory to path for imports
+sys.path.append(str(Path(__file__).parent.parent))
+
+from config.settings import settings
+from rag.retriever import Retriever
+from rag.query_engine import QueryEngine
+
+# ----------------------------
+# Page Configuration
+# ----------------------------
 st.set_page_config(
     page_title="🧠 RAG Builder",
     page_icon="🤖",
@@ -16,6 +34,22 @@ if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = [
         ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your dataset.")
     ]
+if "query_engine" not in st.session_state:
+    st.session_state["query_engine"] = None
+if "is_loading" not in st.session_state:
+    st.session_state["is_loading"] = False
+
+# ----------------------------
+# Initialize RAG Engine (on first load)
+# ----------------------------
+@st.cache_resource
+def initialize_rag_engine():
+    """Initialize RAG engine once and cache it."""
+    try:
+        engine = QueryEngine()
+        return engine, True, "✅ RAG engine initialized successfully!"
+    except Exception as e:
+        return None, False, f"❌ Error initializing RAG: {str(e)}"
 
 # ----------------------------
 # Enhanced Dark Mode CSS with Glassmorphism & Animations
@@ -143,6 +177,19 @@ h1 {
     animation: slideInLeft 0.3s ease;
 }
 
+/* Sources Badge */
+.source-badge {
+    display: inline-block;
+    background: rgba(0, 191, 165, 0.2);
+    color: #00BFA5;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+    border: 1px solid rgba(0, 191, 165, 0.3);
+}
+
 /* Animations */
 @keyframes slideInRight {
     from {
@@ -164,6 +211,20 @@ h1 {
         opacity: 1;
         transform: translateX(0);
     }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
 }
 
 /* Textarea Styling */
@@ -234,6 +295,15 @@ hr {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 191, 165, 0.5);
 }
+
+/* Info Box */
+.info-box {
+    background: rgba(0, 191, 165, 0.1);
+    border: 1px solid rgba(0, 191, 165, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -241,36 +311,87 @@ hr {
 # Sidebar navigation
 # ----------------------------
 st.sidebar.title("Navigation")
+
+# Show system info
+with st.sidebar.expander("🔧 System Info", expanded=False):
+    st.markdown(f"""
+    **Embedding:** {settings.EMBEDDING_PROVIDER}  
+    **Model:** {settings.HUGGINGFACE_MODEL if settings.EMBEDDING_PROVIDER == 'huggingface' else settings.OPENAI_EMBEDDING_MODEL}  
+    **LLM:** {settings.LLM_PROVIDER} ({settings.GROQ_LLM_MODEL if settings.LLM_PROVIDER == 'groq' else settings.OPENAI_LLM_MODEL})  
+    **Vector DB:** Qdrant ({settings.QDRANT_MODE})
+    """)
+    
+    if settings.EMBEDDING_PROVIDER == "huggingface" and settings.LLM_PROVIDER == "groq":
+        st.success("💰 100% FREE Setup!")
+
+st.sidebar.markdown("---")
+
+# Navigation buttons
 if st.session_state["current_page"] == "home":
-    st.sidebar.button("Go to Chatbot", on_click=lambda: st.session_state.update({"current_page": "chatbot"}))
+    if st.sidebar.button("💬 Go to Chatbot", use_container_width=True):
+        st.session_state["current_page"] = "chatbot"
+        st.rerun()
 else:
-    st.sidebar.button("Go to Home", on_click=lambda: st.session_state.update({"current_page": "home"}))
+    if st.sidebar.button("🏠 Go to Home", use_container_width=True):
+        st.session_state["current_page"] = "home"
+        st.rerun()
+
+# Clear chat button
+if st.session_state["current_page"] == "chatbot":
+    st.sidebar.markdown("---")
+    if st.sidebar.button("🗑️ Clear Chat History", use_container_width=True):
+        st.session_state["chat_history"] = [
+            ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your dataset.")
+        ]
+        st.rerun()
 
 # ----------------------------
 # Home page
 # ----------------------------
 if st.session_state["current_page"] == "home":
-    st.header("🏠 Home - Upload Dataset & Create Chatbot")
+    st.header("🏠 Home - RAG System Overview")
     st.markdown("---")
-
+    
+    # Display current configuration
+    st.markdown('<div class="info-box">', unsafe_allow_html=True)
+    st.markdown(f"""
+    ### 📊 Current Configuration
+    
+    **Vector Database:** Qdrant ({settings.QDRANT_MODE} mode)  
+    **Collection:** `{settings.QDRANT_COLLECTION_NAME}`  
+    **Embedding Model:** {settings.HUGGINGFACE_MODEL if settings.EMBEDDING_PROVIDER == 'huggingface' else settings.OPENAI_EMBEDDING_MODEL}  
+    **LLM Model:** {settings.GROQ_LLM_MODEL if settings.LLM_PROVIDER == 'groq' else settings.OPENAI_LLM_MODEL}  
+    **Top-K Results:** {settings.RETRIEVAL_TOP_K}  
+    **Min Similarity Score:** {settings.MIN_SIMILARITY_SCORE}
+    """)
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown("&nbsp;")
+    
+    # File upload section (for future enhancement)
+    st.subheader("📁 Upload Additional Documents (Coming Soon)")
     uploaded_files = st.file_uploader(
-        "📁 Drag & drop your files (PDF, CSV, TXT)",
+        "Drag & drop your files (PDF, CSV, TXT)",
         accept_multiple_files=True,
         type=["pdf", "csv", "txt"],
+        disabled=True,
+        help="This feature will allow you to add more documents to the knowledge base."
     )
-    if uploaded_files:
-        st.success(f"✅ {len(uploaded_files)} file(s) uploaded successfully!")
-
+    
     st.markdown("&nbsp;")
-    model = st.selectbox("🤖 Select embedding model:", ["text-embedding-3-small", "text-embedding-3-large"])
-
-    st.markdown("&nbsp;")
-    if st.button("Create Chatbot ▶"):
-        if uploaded_files:
+    st.markdown("---")
+    
+    # Quick actions
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("💬 Start Chatting", use_container_width=True, type="primary"):
             st.session_state["current_page"] = "chatbot"
             st.rerun()
-        else:
-            st.warning("⚠️ Please upload at least one file before creating the chatbot.")
+    
+    with col2:
+        if st.button("📊 View System Stats", use_container_width=True):
+            st.info("System statistics feature coming soon!")
 
 # ----------------------------
 # Chatbot page
@@ -279,6 +400,17 @@ elif st.session_state["current_page"] == "chatbot":
     st.header("💬 RAG Chatbot")
     st.markdown("---")
     
+    # Initialize RAG engine if not already done
+    if st.session_state["query_engine"] is None:
+        with st.spinner("🔧 Initializing RAG engine..."):
+            engine, success, message = initialize_rag_engine()
+            if success:
+                st.session_state["query_engine"] = engine
+                st.success(message)
+            else:
+                st.error(message)
+                st.stop()
+    
     # Chat container with custom class
     st.markdown('<div class="chat-container">', unsafe_allow_html=True)
     chat_container = st.container()
@@ -286,7 +418,7 @@ elif st.session_state["current_page"] == "chatbot":
     # Display chat history
     with chat_container:
         for sender, msg in st.session_state["chat_history"]:
-            # Escape HTML dan replace newlines dengan <br>
+            # Escape HTML and replace newlines with <br>
             escaped_msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
             if sender == "user":
                 st.markdown(f'<div class="user-msg">{escaped_msg}</div>', unsafe_allow_html=True)
@@ -296,7 +428,7 @@ elif st.session_state["current_page"] == "chatbot":
     st.markdown('</div>', unsafe_allow_html=True)
 
     # ----------------------------
-    # Input + Send button (side by side, button di kanan bawah)
+    # Input + Send button (side by side)
     # ----------------------------
     st.markdown("&nbsp;")
     
@@ -308,20 +440,92 @@ elif st.session_state["current_page"] == "chatbot":
             value="",
             key="input_box",
             label_visibility="collapsed",
-            placeholder="💭 Type your message here...",
+            placeholder="💭 Type your question here... (e.g., 'Which tables use incremental extraction?')",
             height=100
         )
     
     with col2:
-        send_clicked = st.button("Send", use_container_width=True)
+        send_clicked = st.button("Send", use_container_width=True, type="primary")
 
     # ----------------------------
-    # Handle send action
+    # Handle send action with RAG
     # ----------------------------
     if send_clicked and user_input.strip():
-        # Tambah ke chat_history
+        # Add user message to chat
         st.session_state["chat_history"].append(("user", user_input))
-        st.session_state["chat_history"].append(("bot", "🤖 This is a placeholder response. Your RAG system will provide real answers here!"))
         
-        # Rerun untuk update UI
+        # Show loading state
+        with st.spinner("🤖 Thinking..."):
+            try:
+                # Query the RAG engine
+                engine = st.session_state["query_engine"]
+                result = engine.query(user_input)
+                
+                if result.get('success', False):
+                    # Format response
+                    answer = result['answer']
+                    num_sources = result.get('num_sources', 0)
+                    
+                    if num_sources > 0:
+                        # Has sources
+                        avg_score = result['avg_score']
+                        response = f"{answer}\n\n📚 Sources: {num_sources} chunks (avg score: {avg_score:.2f})"
+                    else:
+                        # No sources found
+                        response = f"{answer}\n\n💡 Tip: Try rephrasing your question or lower MIN_SIMILARITY_SCORE in .env"
+                    
+                    st.session_state["chat_history"].append(("bot", response))
+                else:
+                    error_msg = f"❌ Sorry, I encountered an error: {result.get('error', 'Unknown error')}"
+                    st.session_state["chat_history"].append(("bot", error_msg))
+                
+            except Exception as e:
+                import traceback
+                error_detail = traceback.format_exc()
+                error_msg = f"❌ Error processing your question: {str(e)}"
+                st.session_state["chat_history"].append(("bot", error_msg))
+        
+        # Rerun to update UI
         st.rerun()
+
+    # ----------------------------
+    # Example questions
+    # ----------------------------
+    st.markdown("---")
+    st.markdown("### 💡 Example Questions:")
+    
+    example_questions = [
+        "Which tables use incremental extraction with watermark datetime?",
+        "What are the tables in the EMR database?",
+        "Show me tables with full load extraction mode",
+        "Which tables have UUID as primary key?"
+    ]
+    
+    cols = st.columns(2)
+    for idx, question in enumerate(example_questions):
+        with cols[idx % 2]:
+            if st.button(question, key=f"example_{idx}", use_container_width=True):
+                st.session_state["chat_history"].append(("user", question))
+                
+                with st.spinner("🤖 Thinking..."):
+                    try:
+                        engine = st.session_state["query_engine"]
+                        result = engine.query(question)
+                        
+                        if result['success']:
+                            answer = result['answer']
+                            num_sources = result['num_sources']
+                            avg_score = result['avg_score']
+                            
+                            response = f"{answer}\n\n"
+                            response += f"📚 Sources: {num_sources} chunks (avg score: {avg_score:.2f})"
+                            
+                            st.session_state["chat_history"].append(("bot", response))
+                        else:
+                            error_msg = f"❌ Sorry, I encountered an error: {result.get('error', 'Unknown error')}"
+                            st.session_state["chat_history"].append(("bot", error_msg))
+                    except Exception as e:
+                        error_msg = f"❌ Error: {str(e)}"
+                        st.session_state["chat_history"].append(("bot", error_msg))
+                
+                st.rerun()

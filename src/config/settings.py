@@ -31,8 +31,8 @@ class Settings:
     GROQ_API_KEY: Optional[str] = os.getenv("GROQ_API_KEY")
     
     # ==================== EMBEDDING CONFIGURATION ====================
-    # Supported: "openai" only (Groq doesn't support embeddings)
-    EMBEDDING_PROVIDER: str = os.getenv("EMBEDDING_PROVIDER", "openai")
+    # Supported: "openai" or "huggingface" (FREE!)
+    EMBEDDING_PROVIDER: str = os.getenv("EMBEDDING_PROVIDER", "huggingface")
     
     # OpenAI embedding models
     OPENAI_EMBEDDING_MODEL: str = os.getenv(
@@ -40,24 +40,32 @@ class Settings:
         "text-embedding-3-small"  # Options: text-embedding-3-small, text-embedding-3-large
     )
     
-    # Groq embedding models (if using Groq)
-    GROQ_EMBEDDING_MODEL: str = os.getenv(
-        "GROQ_EMBEDDING_MODEL",
-        "text-embedding-3-small"  # Groq uses OpenAI-compatible format
+    # HuggingFace embedding models (FREE, local)
+    HUGGINGFACE_MODEL: str = os.getenv(
+        "HUGGINGFACE_MODEL",
+        "sentence-transformers/all-mpnet-base-v2"  # 768 dims, excellent quality
     )
+    # Popular alternatives:
+    # - all-MiniLM-L6-v2: 384 dims, very fast
+    # - multi-qa-mpnet-base-dot-v1: 768 dims, optimized for Q&A
+    # - paraphrase-multilingual-mpnet-base-v2: 768 dims, multilingual
     
     # Embedding dimensions
-    EMBEDDING_DIMENSION: int = int(os.getenv("EMBEDDING_DIMENSION", "1536"))
-    # Note: text-embedding-3-small = 1536 dims, text-embedding-3-large = 3072 dims
+    EMBEDDING_DIMENSION: int = int(os.getenv("EMBEDDING_DIMENSION", "768"))
+    # Note: 
+    # - text-embedding-3-small (OpenAI) = 1536 dims
+    # - text-embedding-3-large (OpenAI) = 3072 dims
+    # - all-mpnet-base-v2 (HuggingFace) = 768 dims
+    # - all-MiniLM-L6-v2 (HuggingFace) = 384 dims
     
     # ==================== QDRANT CONFIGURATION ====================
-    # Qdrant mode: "local" or "cloud"
+    # Qdrant mode: "local" or "server" or "cloud"
     QDRANT_MODE: str = os.getenv("QDRANT_MODE", "local")
     
     # Local Qdrant settings
     QDRANT_LOCAL_PATH: Path = VECTORSTORE_DIR / "qdrant_storage"
     
-    # Cloud Qdrant settings
+    # Server/Cloud Qdrant settings
     QDRANT_URL: Optional[str] = os.getenv("QDRANT_URL")
     QDRANT_API_KEY: Optional[str] = os.getenv("QDRANT_API_KEY")
     
@@ -82,10 +90,10 @@ class Settings:
     # OpenAI LLM models
     OPENAI_LLM_MODEL: str = os.getenv("OPENAI_LLM_MODEL", "gpt-4o-mini")
     
-    # Groq LLM models
+    # Groq LLM models (FREE!)
     GROQ_LLM_MODEL: str = os.getenv(
         "GROQ_LLM_MODEL",
-        "llama-3.3-70b-versatile"  # Options: mixtral-8x7b-32768, llama-3.3-70b-versatile
+        "llama-3.3-70b-versatile"  # Options: mixtral-8x7b-32768, llama-3.3-70b-versatile, gemma2-9b-it
     )
     
     # LLM parameters
@@ -105,10 +113,14 @@ class Settings:
         
         # Check API keys based on provider
         if cls.EMBEDDING_PROVIDER == "openai" and not cls.OPENAI_API_KEY:
-            errors.append("OPENAI_API_KEY is required for embeddings (Groq doesn't support embeddings)")
+            errors.append("OPENAI_API_KEY is required when EMBEDDING_PROVIDER=openai")
         
-        if cls.EMBEDDING_PROVIDER == "groq":
-            errors.append("EMBEDDING_PROVIDER cannot be 'groq' - Groq doesn't support embeddings. Use 'openai' instead.")
+        if cls.EMBEDDING_PROVIDER == "huggingface":
+            # HuggingFace is FREE and doesn't need API key
+            pass
+        
+        if cls.EMBEDDING_PROVIDER not in ["openai", "huggingface"]:
+            errors.append(f"EMBEDDING_PROVIDER must be 'openai' or 'huggingface', got '{cls.EMBEDDING_PROVIDER}'")
         
         if cls.LLM_PROVIDER == "openai" and not cls.OPENAI_API_KEY:
             errors.append("OPENAI_API_KEY is required when LLM_PROVIDER=openai")
@@ -116,12 +128,13 @@ class Settings:
         if cls.LLM_PROVIDER == "groq" and not cls.GROQ_API_KEY:
             errors.append("GROQ_API_KEY is required when LLM_PROVIDER=groq")
         
-        # Check Qdrant cloud settings
-        if cls.QDRANT_MODE == "cloud":
+        if cls.LLM_PROVIDER not in ["openai", "groq"]:
+            errors.append(f"LLM_PROVIDER must be 'openai' or 'groq', got '{cls.LLM_PROVIDER}'")
+        
+        # Check Qdrant cloud/server settings
+        if cls.QDRANT_MODE in ["cloud", "server"]:
             if not cls.QDRANT_URL:
-                errors.append("QDRANT_URL is required when QDRANT_MODE=cloud")
-            if not cls.QDRANT_API_KEY:
-                errors.append("QDRANT_API_KEY is required when QDRANT_MODE=cloud")
+                errors.append(f"QDRANT_URL is required when QDRANT_MODE={cls.QDRANT_MODE}")
         
         if errors:
             print("❌ Configuration Errors:")
@@ -152,8 +165,9 @@ class Settings:
         print(f"   Provider: {cls.EMBEDDING_PROVIDER}")
         if cls.EMBEDDING_PROVIDER == "openai":
             print(f"   Model: {cls.OPENAI_EMBEDDING_MODEL}")
-        else:
-            print(f"   Model: {cls.GROQ_EMBEDDING_MODEL}")
+        elif cls.EMBEDDING_PROVIDER == "huggingface":
+            print(f"   Model: {cls.HUGGINGFACE_MODEL}")
+            print(f"   💰 FREE - No API costs!")
         print(f"   Dimension: {cls.EMBEDDING_DIMENSION}")
         
         print(f"\n💾 Qdrant:")
@@ -175,8 +189,16 @@ class Settings:
             print(f"   Model: {cls.OPENAI_LLM_MODEL}")
         else:
             print(f"   Model: {cls.GROQ_LLM_MODEL}")
+            if cls.LLM_PROVIDER == "groq":
+                print(f"   💰 FREE - No API costs!")
         print(f"   Temperature: {cls.LLM_TEMPERATURE}")
         print(f"   Max Tokens: {cls.LLM_MAX_TOKENS}")
+        
+        # Show if using 100% FREE setup
+        if cls.EMBEDDING_PROVIDER == "huggingface" and cls.LLM_PROVIDER == "groq":
+            print(f"\n🎉 100% FREE SETUP!")
+            print(f"   Embeddings: HuggingFace (local)")
+            print(f"   LLM: Groq")
         
         print("\n" + "="*70 + "\n")
 

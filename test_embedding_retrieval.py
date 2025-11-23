@@ -207,13 +207,128 @@ def test_indexing():
 def test_retrieval():
     """Test 5: Semantic search."""
     print_section("TEST 5: SEMANTIC SEARCH")
-   
+    
+    try:
+        # Initialize retriever
+        print("🔧 Initializing retriever...\n")
+        retriever = Retriever()
+        
+        # Test query - relevant to the data glossary
+        test_query = "Which tables use incremental extraction with watermark datetime?"
+        print(f"📝 Test query: '{test_query}'\n")
+        
+        # Retrieve
+        print("⏳ Searching vector store...")
+        results = retriever.retrieve(test_query)
+        
+        if results:
+            print(f"\n✅ Retrieved {len(results)} results\n")
+            
+            # Show top result
+            print("=" * 70)
+            print("TOP RESULT:")
+            print("=" * 70)
+            top = results[0]
+            print(f"Score: {top['score']:.4f}")
+            print(f"Text: {top['text'][:200]}...")
+            
+            # Show metadata if available
+            if top.get('metadata'):
+                print(f"Metadata: {top['metadata']}")
+            print("")
+            
+            # Show score distribution
+            scores = [r['score'] for r in results]
+            print("=" * 70)
+            print("SCORE DISTRIBUTION:")
+            print("=" * 70)
+            print(f"Highest: {max(scores):.4f}")
+            print(f"Lowest:  {min(scores):.4f}")
+            print(f"Average: {sum(scores)/len(scores):.4f}")
+            print("")
+            
+            # Show all results briefly
+            print("=" * 70)
+            print("ALL RESULTS:")
+            print("=" * 70)
+            for i, result in enumerate(results, 1):
+                snippet = result['text'][:80].replace('\n', ' ')
+                print(f"{i}. [{result['score']:.3f}] {snippet}...")
+            
+            print("\n✅ Semantic search test passed\n")
+            return True
+        else:
+            print("❌ No results returned\n")
+            print("💡 TIP: Make sure indexing was successful and collection has data\n")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Semantic search failed: {e}\n")
+        import traceback
+        traceback.print_exc()
+        return False
 
 
 def test_query_engine():
     """Test 6: Query engine (RAG)."""
     print_section("TEST 6: QUERY ENGINE (RAG)")
-   
+    
+    try:
+        # Initialize query engine
+        print("🔧 Initializing query engine...\n")
+        engine = QueryEngine()
+        
+        # Test question - relevant to the data glossary
+        test_question = "What are the tables in the EMR database that use incremental extraction? List the table names and their watermark columns."
+        print(f"❓ Test question: '{test_question}'\n")
+        
+        # Execute RAG query
+        print("⏳ Running RAG pipeline (Retrieve + Generate)...\n")
+        result = engine.query(test_question)
+        
+        if result['success']:
+            print("\n✅ RAG query successful!\n")
+            
+            # Show answer
+            print("=" * 70)
+            print("ANSWER:")
+            print("=" * 70)
+            print(result['answer'])
+            print("")
+            
+            # Show sources
+            print("=" * 70)
+            print(f"SOURCES ({result['num_sources']} chunks):")
+            print("=" * 70)
+            for i, source in enumerate(result['sources'], 1):
+                print(f"\n[{i}] Score: {source['score']:.3f}")
+                snippet = source['text'][:150].replace('\n', ' ')
+                print(f"    {snippet}...")
+                
+                # Show metadata if available
+                metadata = source.get('metadata', {})
+                if metadata and metadata.get('source'):
+                    print(f"    Source: {metadata['source']}")
+            
+            print("\n" + "=" * 70)
+            print("METADATA:")
+            print("=" * 70)
+            print(f"Model: {result['model']}")
+            print(f"Provider: {result['provider']}")
+            print(f"Avg Retrieval Score: {result['avg_score']:.3f}")
+            print("=" * 70)
+            
+            print("\n✅ Query engine test passed\n")
+            return True
+        else:
+            print(f"❌ RAG query failed: {result.get('error', 'Unknown error')}\n")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Query engine failed: {e}\n")
+        import traceback
+        traceback.print_exc()
+        return False
 
 
 def run_all_tests():
