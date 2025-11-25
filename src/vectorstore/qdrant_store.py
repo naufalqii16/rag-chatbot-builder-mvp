@@ -231,14 +231,22 @@ class QdrantVectorStore:
                 - metadata: All metadata fields
         """
         try:
-            # Perform search
-            search_results = self.client.search(
-                collection_name=self.collection_name,
-                query_vector=query_vector,
-                limit=top_k,
-                score_threshold=score_threshold,
-                # query_filter=filter_conditions  # TODO: implement filters if needed
-            )
+            # Try new API first (qdrant-client >= 1.8.0)
+            try:
+                search_results = self.client.query_points(
+                    collection_name=self.collection_name,
+                    query=query_vector,
+                    limit=top_k,
+                    score_threshold=score_threshold,
+                ).points
+            except (AttributeError, TypeError):
+                # Fallback to old API (qdrant-client < 1.8.0)
+                search_results = self.client.search(
+                    collection_name=self.collection_name,
+                    query_vector=query_vector,
+                    limit=top_k,
+                    score_threshold=score_threshold,
+                )
             
             # Format results
             results = []

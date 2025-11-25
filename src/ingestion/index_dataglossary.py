@@ -154,7 +154,7 @@ def main():
     """Main entry point."""
     
     # Configuration
-    RECREATE_COLLECTION = False  # Set to True to start fresh (deletes existing data!)
+    RECREATE_COLLECTION = True  # Set to True to start fresh (deletes existing data!)
     
     # Run indexing
     result = index_dataglossary(
