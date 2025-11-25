@@ -149,14 +149,14 @@ class Retriever:
             score = result['score']
             metadata = result.get('metadata', {})
             
-            # Build context entry
-            entry = f"[Chunk {i}] (Score: {score:.3f})\n{text}"
+            # Build context entry - cleaner format without chunk labels
+            entry = f"{text}"
             
             # Add metadata if available
             if metadata:
                 source = metadata.get('source', '')
                 if source:
-                    entry += f"\nSource: {source}"
+                    entry += f"\n[Source: {source}]"
             
             context_parts.append(entry)
         

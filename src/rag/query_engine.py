@@ -66,9 +66,12 @@ User Question: {query}
 
 Instructions:
 - Answer the question using ONLY the information from the context above
+- If the question asks for a LIST (e.g., "which tables", "what are"), make sure to extract and list ALL relevant items from ALL chunks
+- Be COMPREHENSIVE - don't just list examples, list EVERYTHING you find in the context
+- Present your answer in a clean, organized format with bullet points or tables
+- DO NOT mention "Chunk 1", "Chunk 2", etc. in your answer - just present the information directly
+- Group related items together logically
 - If the context doesn't contain enough information to answer, say so clearly
-- Be specific and cite relevant parts of the context
-- Keep your answer concise and focused
 
 Answer:"""
         
