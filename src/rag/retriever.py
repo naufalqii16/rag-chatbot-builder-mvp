@@ -17,15 +17,16 @@ from vectorstore.embedding_huggingface import HuggingFaceEmbedding
 class Retriever:
     """Retrieve relevant chunks from vector store."""
     
-    def __init__(self, top_k: Optional[int] = None):
+    def __init__(self, top_k: Optional[int] = None, collection_name: Optional[str] = None):
         """
         Initialize retriever.
         
         Args:
             top_k: Number of results to return (defaults to RETRIEVAL_TOP_K from settings)
+            collection_name: Name of Qdrant collection to use (defaults to QDRANT_COLLECTION_NAME)
         """
         self.top_k = top_k if top_k is not None else settings.RETRIEVAL_TOP_K
-        self.collection_name = settings.QDRANT_COLLECTION_NAME
+        self.collection_name = collection_name if collection_name is not None else settings.QDRANT_COLLECTION_NAME
         self.min_score = settings.MIN_SIMILARITY_SCORE
         
         # Initialize embedding generator based on provider
@@ -66,8 +67,11 @@ class Retriever:
         k = top_k if top_k is not None else self.top_k
         
         try:
-            # Get Qdrant client
-            self.client = get_qdrant_client(create_collection=False)
+            # Get Qdrant client with specified collection
+            self.client = get_qdrant_client(
+                collection_name=self.collection_name,
+                create_collection=False
+            )
             
             # Generate query embedding
             query_embedding = self._get_query_embedding(query)

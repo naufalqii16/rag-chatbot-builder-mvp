@@ -24,7 +24,8 @@ class QueryEngine:
         self, 
         top_k: Optional[int] = None,
         temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
+        collection_name: Optional[str] = None
     ):
         """
         Initialize query engine with Groq LLM.
@@ -33,9 +34,11 @@ class QueryEngine:
             top_k: Number of chunks to retrieve (defaults to RETRIEVAL_TOP_K)
             temperature: LLM temperature (defaults to LLM_TEMPERATURE)
             max_tokens: Max tokens for generation (defaults to LLM_MAX_TOKENS)
+            collection_name: Qdrant collection to use (defaults to QDRANT_COLLECTION_NAME)
         """
-        # Initialize retriever
-        self.retriever = Retriever(top_k=top_k)
+        # Initialize retriever with specified collection
+        self.retriever = Retriever(top_k=top_k, collection_name=collection_name)
+        self.collection_name = collection_name
         
         # LLM settings from env or parameters
         self.temperature = temperature if temperature is not None else settings.LLM_TEMPERATURE

@@ -114,7 +114,7 @@ def index_user_file(
     print(f"🔄 Recreate collection: {not append_to_existing}\n")
     
     try:
-        builder = IndexBuilder()
+        builder = IndexBuilder(collection_name=settings.QDRANT_USER_UPLOAD_COLLECTION)
         
         success = builder.build_index(
             chunks=chunks,
@@ -129,7 +129,10 @@ def index_user_file(
             
             # Get statistics
             from vectorstore.qdrant_store import get_qdrant_client
-            client = get_qdrant_client(create_collection=False)
+            client = get_qdrant_client(
+                collection_name=settings.QDRANT_USER_UPLOAD_COLLECTION,
+                create_collection=False
+            )
             info = client.get_collection_info()
             client.close()
             

@@ -163,7 +163,8 @@ class IndexBuilder:
     def __init__(
         self,
         embedding_provider: Optional[str] = None,
-        embedding_model: Optional[str] = None
+        embedding_model: Optional[str] = None,
+        collection_name: Optional[str] = None
     ):
         """
         Initialize index builder.
@@ -171,12 +172,14 @@ class IndexBuilder:
         Args:
             embedding_provider: 'openai' or 'groq'
             embedding_model: Model name
+            collection_name: Qdrant collection name (defaults to QDRANT_COLLECTION_NAME)
         """
         self.embedding_generator = EmbeddingGenerator(
             provider=embedding_provider,
             model=embedding_model
         )
         self.qdrant_client = None
+        self.collection_name = collection_name
     
     def load_chunks_from_json(self, json_path: str) -> List[Dict[str, Any]]:
         """
@@ -232,7 +235,10 @@ class IndexBuilder:
             
             # Initialize Qdrant client
             print("📦 Initializing Qdrant...")
-            self.qdrant_client = get_qdrant_client(create_collection=False)
+            self.qdrant_client = get_qdrant_client(
+                collection_name=self.collection_name,
+                create_collection=False
+            )
             
             # Create or recreate collection
             if create_new_collection:

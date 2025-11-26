@@ -45,26 +45,299 @@ inject_custom_css()
 # ----------------------------
 if "current_page" not in st.session_state:
     st.session_state["current_page"] = "home"
-if "chat_history" not in st.session_state:
-    st.session_state["chat_history"] = [
-        ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your dataset.")
+if "glossary_chat_history" not in st.session_state:
+    st.session_state["glossary_chat_history"] = [
+        ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your glossary dataset.")
     ]
-if "query_engine" not in st.session_state:
-    st.session_state["query_engine"] = None
+if "user_upload_chat_history" not in st.session_state:
+    st.session_state["user_upload_chat_history"] = [
+        ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your uploaded documents.")
+    ]
+if "glossary_query_engine" not in st.session_state:
+    st.session_state["glossary_query_engine"] = None
+if "user_upload_query_engine" not in st.session_state:
+    st.session_state["user_upload_query_engine"] = None
 if "is_loading" not in st.session_state:
     st.session_state["is_loading"] = False
+if "active_chatbot" not in st.session_state:
+    st.session_state["active_chatbot"] = "glossary"  # Default to glossary
 
 # ----------------------------
-# Initialize RAG Engine (on first load)
+# Initialize RAG Engines (on first load)
 # ----------------------------
 @st.cache_resource
-def initialize_rag_engine():
-    """Initialize RAG engine once and cache it."""
+def initialize_glossary_engine():
+    """Initialize RAG engine for Glossary data."""
     try:
-        engine = QueryEngine()
-        return engine, True, "✅ RAG engine initialized successfully!"
+        engine = QueryEngine(collection_name=settings.QDRANT_GLOSSARY_COLLECTION)
+        return engine, True, "✅ Glossary RAG engine initialized!"
     except Exception as e:
-        return None, False, f"❌ Error initializing RAG: {str(e)}"
+        return None, False, f"❌ Error initializing Glossary RAG: {str(e)}"
+
+@st.cache_resource
+def initialize_user_upload_engine():
+    """Initialize RAG engine for User Upload data."""
+    try:
+        engine = QueryEngine(collection_name=settings.QDRANT_USER_UPLOAD_COLLECTION)
+        return engine, True, "✅ User Upload RAG engine initialized!"
+    except Exception as e:
+        return None, False, f"❌ Error initializing User Upload RAG: {str(e)}"
+
+# ----------------------------
+# Enhanced Dark Mode CSS with Glassmorphism & Animations
+# ----------------------------
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Main App Styling */
+.stApp { 
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+    color: #ffffff; 
+    font-family: 'Inter', sans-serif;
+}
+
+/* Sidebar Styling */
+section[data-testid="stSidebar"] {
+    background: rgba(20, 20, 30, 0.8);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(0, 191, 165, 0.1);
+}
+
+section[data-testid="stSidebar"] h1 {
+    color: #00BFA5;
+    font-weight: 700;
+    text-align: center;
+    padding: 1rem 0;
+    border-bottom: 2px solid rgba(0, 191, 165, 0.3);
+    margin-bottom: 2rem;
+}
+
+/* Button Styling with Hover Effects */
+div.stButton > button {
+    background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 191, 165, 0.3);
+}
+
+div.stButton > button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 191, 165, 0.5);
+    background: linear-gradient(135deg, #00D4B8 0%, #00BFA5 100%);
+}
+
+div.stButton > button:active {
+    transform: translateY(0px);
+}
+
+/* File Uploader Styling */
+.stFileUploader {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px dashed rgba(0, 191, 165, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.stFileUploader:hover {
+    border-color: rgba(0, 191, 165, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.stFileUploader label {
+    color: #00BFA5 !important;
+    font-weight: 600;
+}
+
+/* Select Box Styling */
+.stSelectbox label {
+    color: #00BFA5 !important;
+    font-weight: 600;
+}
+
+/* Header Styling */
+h1, h2, h3 {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+h1 {
+    background: linear-gradient(135deg, #00BFA5 0%, #00D4B8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Chat Messages with Glassmorphism */
+.user-msg { 
+    background: linear-gradient(135deg, rgba(0, 191, 165, 0.15) 0%, rgba(0, 191, 165, 0.1) 100%);
+    backdrop-filter: blur(10px);
+    color: #ffffff; 
+    padding: 12px 18px; 
+    border-radius: 18px 18px 4px 18px;
+    margin: 8px 0; 
+    max-width: 70%; 
+    float: right; 
+    clear: both; 
+    font-size: 15px; 
+    font-family: 'Inter', sans-serif;
+    border: 1px solid rgba(0, 191, 165, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 191, 165, 0.1);
+    animation: slideInRight 0.3s ease;
+}
+
+.bot-msg { 
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    color: #ffffff; 
+    padding: 12px 18px; 
+    border-radius: 18px 18px 18px 4px;
+    margin: 8px 0; 
+    max-width: 70%; 
+    float: left; 
+    clear: both; 
+    font-size: 15px; 
+    font-family: 'Inter', sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: slideInLeft 0.3s ease;
+}
+
+/* Sources Badge */
+.source-badge {
+    display: inline-block;
+    background: rgba(0, 191, 165, 0.2);
+    color: #00BFA5;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+    border: 1px solid rgba(0, 191, 165, 0.3);
+}
+
+/* Animations */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Textarea Styling */
+textarea {
+    font-size: 15px !important;
+    font-family: 'Inter', sans-serif !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 2px solid rgba(0, 191, 165, 0.2) !important;
+    border-radius: 12px !important;
+    color: #ffffff !important;
+    padding: 12px !important;
+    transition: all 0.3s ease !important;
+}
+
+textarea:focus {
+    border-color: rgba(0, 191, 165, 0.6) !important;
+    box-shadow: 0 0 20px rgba(0, 191, 165, 0.2) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Success/Warning Messages */
+.element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stAlert"] {
+    border-radius: 12px;
+    border-left: 4px solid #00BFA5;
+    background: rgba(0, 191, 165, 0.1);
+}
+
+/* Divider Styling */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0, 191, 165, 0.3), transparent);
+    margin: 2rem 0;
+}
+
+/* Chat Container */
+.chat-container {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    min-height: 400px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 191, 165, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 191, 165, 0.5);
+}
+
+/* Info Box */
+.info-box {
+    background: rgba(0, 191, 165, 0.1);
+    border: 1px solid rgba(0, 191, 165, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ----------------------------
 # Sidebar navigation
@@ -95,13 +368,37 @@ else:
         st.session_state["current_page"] = "home"
         st.rerun()
 
+# Chatbot selection
+if st.session_state["current_page"] == "chatbot":
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("### 🤖 Pilih Chatbot:")
+    
+    col1, col2 = st.sidebar.columns(2)
+    with col1:
+        if st.button("📚 Glossary", 
+                    use_container_width=True, 
+                    type="primary" if st.session_state["active_chatbot"] == "glossary" else "secondary"):
+            st.session_state["active_chatbot"] = "glossary"
+            st.rerun()
+    with col2:
+        if st.button("📁 User Docs", 
+                    use_container_width=True,
+                    type="primary" if st.session_state["active_chatbot"] == "user_upload" else "secondary"):
+            st.session_state["active_chatbot"] = "user_upload"
+            st.rerun()
+
 # Clear chat button
 if st.session_state["current_page"] == "chatbot":
     st.sidebar.markdown("---")
     if st.sidebar.button("🗑️ Clear Chat History", use_container_width=True):
-        st.session_state["chat_history"] = [
-            ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your dataset.")
-        ]
+        if st.session_state["active_chatbot"] == "glossary":
+            st.session_state["glossary_chat_history"] = [
+                ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your glossary dataset.")
+            ]
+        else:
+            st.session_state["user_upload_chat_history"] = [
+                ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your uploaded documents.")
+            ]
         st.rerun()
 
 # ----------------------------
@@ -127,15 +424,78 @@ if st.session_state["current_page"] == "home":
     
     st.markdown("&nbsp;")
     
-    # File upload section (for future enhancement)
-    st.subheader("📁 Upload Additional Documents (Coming Soon)")
+    # File upload section (ACTIVE NOW!)
+    st.subheader("📁 Upload Additional Documents")
+    st.markdown("Upload your files to add them to the knowledge base. Supported formats: **PDF, CSV, TXT, XLSX, DOCX**")
+    
     uploaded_files = st.file_uploader(
-        "Drag & drop your files (PDF, CSV, TXT)",
+        "Drag & drop your files here or click to browse",
         accept_multiple_files=True,
-        type=["pdf", "csv", "txt"],
-        disabled=True,
-        help="This feature will allow you to add more documents to the knowledge base."
+        type=["pdf", "csv", "txt", "xlsx", "xls", "docx", "doc"],
+        help="Upload documents to automatically chunk and index them into the vector database."
     )
+    
+    # Process uploaded files
+    if uploaded_files:
+        st.markdown("---")
+        st.subheader(f"📤 Uploaded Files ({len(uploaded_files)})")
+        
+        # Display uploaded files
+        for idx, uploaded_file in enumerate(uploaded_files, 1):
+            file_size = uploaded_file.size / 1024  # KB
+            st.markdown(f"**{idx}.** `{uploaded_file.name}` ({file_size:.2f} KB)")
+        
+        st.markdown("&nbsp;")
+        
+        # Process button
+        if st.button("🚀 Process & Index Files", use_container_width=True, type="primary"):
+            import sys
+            sys.path.insert(0, str(Path(__file__).parent.parent))
+            from ingestion.ingestion_module import process_and_index_files
+            
+            with st.spinner("📝 Processing documents..."):
+                try:
+                    # Save uploaded files temporarily
+                    temp_dir = Path("data/temp_uploads")
+                    temp_dir.mkdir(parents=True, exist_ok=True)
+                    
+                    file_paths = []
+                    for uploaded_file in uploaded_files:
+                        file_path = temp_dir / uploaded_file.name
+                        with open(file_path, "wb") as f:
+                            f.write(uploaded_file.getbuffer())
+                        file_paths.append(file_path)
+                    
+                    # Process and index
+                    st.info("🔄 Chunking documents...")
+                    result = process_and_index_files(file_paths)
+                    
+                    if result.get('success', False):
+                        st.success(f"✅ Successfully processed {result['total_chunks']} chunks from {len(uploaded_files)} file(s)!")
+                        st.balloons()
+                        
+                        # Show stats
+                        st.markdown("### 📊 Indexing Statistics:")
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            st.metric("Files Processed", len(uploaded_files))
+                        with col2:
+                            st.metric("Total Chunks", result['total_chunks'])
+                        with col3:
+                            st.metric("Vectors Added", result.get('vectors_indexed', result['total_chunks']))
+                        
+                        # Clean up temp files
+                        import shutil
+                        shutil.rmtree(temp_dir)
+                        
+                    else:
+                        st.error(f"❌ Error: {result.get('error', 'Unknown error')}")
+                        
+                except Exception as e:
+                    st.error(f"❌ Error processing files: {str(e)}")
+                    import traceback
+                    with st.expander("Show error details"):
+                        st.code(traceback.format_exc())
     
     st.markdown("&nbsp;")
     st.markdown('<div class="div-hr"></div>', unsafe_allow_html=True)
@@ -156,15 +516,27 @@ if st.session_state["current_page"] == "home":
 # Chatbot page
 # ----------------------------
 elif st.session_state["current_page"] == "chatbot":
-    st.header("💬 RAG Chatbot")
-    st.markdown('<div class="div-hr"></div>', unsafe_allow_html=True)
+    # Show which chatbot is active
+    chatbot_name = "📚 Data Glossary" if st.session_state["active_chatbot"] == "glossary" else "📁 User Documents"
+    st.header(f"💬 RAG Chatbot - {chatbot_name}")
+    st.markdown("---")
+    
+    # Get current engine and chat history based on active chatbot
+    if st.session_state["active_chatbot"] == "glossary":
+        engine_key = "glossary_query_engine"
+        chat_history_key = "glossary_chat_history"
+        initialize_func = initialize_glossary_engine
+    else:
+        engine_key = "user_upload_query_engine"
+        chat_history_key = "user_upload_chat_history"
+        initialize_func = initialize_user_upload_engine
     
     # Initialize RAG engine if not already done
-    if st.session_state["query_engine"] is None:
-        with st.spinner("🔧 Initializing RAG engine..."):
-            engine, success, message = initialize_rag_engine()
+    if st.session_state[engine_key] is None:
+        with st.spinner(f"🔧 Initializing {chatbot_name} engine..."):
+            engine, success, message = initialize_func()
             if success:
-                st.session_state["query_engine"] = engine
+                st.session_state[engine_key] = engine
                 st.success(message)
             else:
                 st.error(message)
@@ -176,8 +548,7 @@ elif st.session_state["current_page"] == "chatbot":
     # chat_container = st.container()
         
     with chat_container:
-        # Display chat history
-        for sender, msg in st.session_state["chat_history"]:
+        for sender, msg in st.session_state[chat_history_key]:
             # Escape HTML and replace newlines with <br>
             escaped_msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
             if sender == "user":
@@ -196,10 +567,10 @@ elif st.session_state["current_page"] == "chatbot":
         user_input = st.text_area(
             "You:", 
             value="",
-            key="input_box",
+            key=f"input_box_{st.session_state['active_chatbot']}",
             label_visibility="collapsed",
-            placeholder="💭 Type your question here... (e.g., 'Which tables use incremental extraction?')",
-            height=15
+            placeholder=f"💭 Ketik pertanyaan Anda tentang {chatbot_name}...",
+            height=100
         )
     
     with col2:
@@ -210,13 +581,13 @@ elif st.session_state["current_page"] == "chatbot":
     # ----------------------------
     if send_clicked and user_input.strip():
         # Add user message to chat
-        st.session_state["chat_history"].append(("user", user_input))
+        st.session_state[chat_history_key].append(("user", user_input))
         
         # Show loading state
         with st.spinner("🤖 Thinking..."):
             try:
                 # Query the RAG engine
-                engine = st.session_state["query_engine"]
+                engine = st.session_state[engine_key]
                 result = engine.query(user_input)
                 
                 if result.get('success', False):
@@ -230,44 +601,52 @@ elif st.session_state["current_page"] == "chatbot":
                         response = f"{answer} 📚 Sources: {num_sources} chunks (avg score: {avg_score:.2f})"
                     else:
                         # No sources found
-                        response = f"{answer} 💡 Tip: Try rephrasing your question or lower MIN_SIMILARITY_SCORE in .env"
+                        response = f"{answer}\n\n💡 Tip: Coba ubah pertanyaan atau turunkan MIN_SIMILARITY_SCORE di .env"
                     
-                    st.session_state["chat_history"].append(("bot", response))
+                    st.session_state[chat_history_key].append(("bot", response))
                 else:
                     error_msg = f"❌ Sorry, I encountered an error: {result.get('error', 'Unknown error')}"
-                    st.session_state["chat_history"].append(("bot", error_msg))
+                    st.session_state[chat_history_key].append(("bot", error_msg))
                 
             except Exception as e:
                 import traceback
                 error_detail = traceback.format_exc()
                 error_msg = f"❌ Error processing your question: {str(e)}"
-                st.session_state["chat_history"].append(("bot", error_msg))
+                st.session_state[chat_history_key].append(("bot", error_msg))
         
         # Rerun to update UI
         st.rerun()
 
     # ----------------------------
-    # Example questions
+    # Example questions (different for each chatbot)
     # ----------------------------
     st.markdown('<div class="div-hr"></div>', unsafe_allow_html=True)
     st.markdown("### 💡 Example Questions:")
     
-    example_questions = [
-        "Which tables use incremental extraction with watermark datetime?",
-        "What are the tables in the EMR database?",
-        "Show me tables with full load extraction mode",
-        "Which tables have UUID as primary key?"
-    ]
+    if st.session_state["active_chatbot"] == "glossary":
+        example_questions = [
+            "Which tables use incremental extraction with watermark datetime?",
+            "What are the tables in the EMR database?",
+            "Show me tables with full load extraction mode",
+            "Which tables have UUID as primary key?"
+        ]
+    else:
+        example_questions = [
+            "Apa isi dari dokumen yang saya upload?",
+            "Berikan ringkasan dari dokumen ini",
+            "Apa poin-poin penting dalam dokumen?",
+            "Jelaskan topik utama dalam dokumen"
+        ]
     
     cols = st.columns(2)
     for idx, question in enumerate(example_questions):
         with cols[idx % 2]:
-            if st.button(question, key=f"example_{idx}", use_container_width=True):
-                st.session_state["chat_history"].append(("user", question))
+            if st.button(question, key=f"example_{st.session_state['active_chatbot']}_{idx}", use_container_width=True):
+                st.session_state[chat_history_key].append(("user", question))
                 
                 with st.spinner("🤖 Thinking..."):
                     try:
-                        engine = st.session_state["query_engine"]
+                        engine = st.session_state[engine_key]
                         result = engine.query(question)
                         
                         if result['success']:
@@ -278,12 +657,12 @@ elif st.session_state["current_page"] == "chatbot":
                             response = f"{answer}"
                             response += f"📚 Sources: {num_sources} chunks (avg score: {avg_score:.2f})"
                             
-                            st.session_state["chat_history"].append(("bot", response))
+                            st.session_state[chat_history_key].append(("bot", response))
                         else:
                             error_msg = f"❌ Sorry, I encountered an error: {result.get('error', 'Unknown error')}"
-                            st.session_state["chat_history"].append(("bot", error_msg))
+                            st.session_state[chat_history_key].append(("bot", error_msg))
                     except Exception as e:
                         error_msg = f"❌ Error: {str(e)}"
-                        st.session_state["chat_history"].append(("bot", error_msg))
+                        st.session_state[chat_history_key].append(("bot", error_msg))
                 
                 st.rerun()
