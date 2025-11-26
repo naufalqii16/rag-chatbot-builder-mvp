@@ -13,7 +13,9 @@ openai>=1.0.0
 pandas>=2.0.0
 numpy>=1.24.0
 PyPDF2>=3.0.0
+python-docx>=1.0.0
 chardet>=5.0.0
 openpyxl>=3.1.0
 xlrd>=2.0.0
 sentence-transformers
+

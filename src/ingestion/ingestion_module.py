@@ -483,3 +483,88 @@ if __name__ == "__main__":
     # print(f"Text length: {result['metadata'].get('character_count')}")
     
     print("Ingestion module ready. Use ingest() function to process files.")
+
+
+def process_and_index_files(file_paths: List[Path]) -> Dict[str, Any]:
+    """
+    Process uploaded files: chunk and index to vector database.
+    
+    Args:
+        file_paths: List of file paths to process
+        
+    Returns:
+        Dictionary with processing results
+    """
+    try:
+        import sys
+        from pathlib import Path
+        sys.path.append(str(Path(__file__).parent.parent))
+        
+        from config.settings import settings
+        from vectorstore.index_builder import IndexBuilder
+        from ingestion.user_upload_chunking import process_user_files
+        
+        # Step 1: Ingest and chunk files
+        all_chunks = []
+        
+        for file_path in file_paths:
+            # Ingest file
+            module = DataIngestionModule()
+            result = module.ingest_file(str(file_path))
+            
+            if result['status'] != 'success':
+                continue
+            
+            # Convert to text
+            if isinstance(result['data'], pd.DataFrame):
+                # For tabular data, convert to readable text
+                text_content = result['data'].to_string(index=False)
+            else:
+                # For text/PDF
+                text_content = result['data']
+            
+            # Chunk the text
+            chunks = process_user_files(
+                text_content=text_content,
+                source_name=file_path.name,
+                chunk_size=settings.CHUNK_SIZE,
+                chunk_overlap=settings.CHUNK_OVERLAP
+            )
+            
+            all_chunks.extend(chunks)
+        
+        if not all_chunks:
+            return {
+                'success': False,
+                'error': 'No chunks generated from files'
+            }
+        
+        # Step 2: Build index (embed and store in Qdrant)
+        builder = IndexBuilder()
+        success = builder.build_index(
+            chunks=all_chunks,
+            batch_size=20,
+            create_new_collection=False  # Append to existing collection
+        )
+        
+        if success:
+            return {
+                'success': True,
+                'total_chunks': len(all_chunks),
+                'vectors_indexed': len(all_chunks),
+                'files_processed': len(file_paths)
+            }
+        else:
+            return {
+                'success': False,
+                'error': 'Failed to index chunks'
+            }
+            
+    except Exception as e:
+        import traceback
+        return {
+            'success': False,
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }
+
