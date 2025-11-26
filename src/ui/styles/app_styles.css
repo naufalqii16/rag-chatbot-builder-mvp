@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+
+header[data-testid="stHeader"] {
+    background: transparent !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+main[data-testid="stAppViewContainer"] {
+    padding-top: 0 !important;
+}
+
+
+/* Main App Styling */
+.stApp { 
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+    color: #ffffff; 
+    font-family: 'Inter', sans-serif;
+}
+
+/* Sidebar Styling */
+section[data-testid="stSidebar"] {
+    background: rgba(20, 20, 30, 0.8);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(0, 191, 165, 0.1);
+}
+
+section[data-testid="stSidebar"] h1 {
+    color: #00BFA5;
+    font-weight: 700;
+    text-align: center;
+    padding: 1rem 0;
+    border-bottom: 2px solid rgba(0, 191, 165, 0.3);
+    margin-bottom: 2rem;
+}
+
+/* Button Styling with Hover Effects */
+div.stButton > button {
+    background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 191, 165, 0.3);
+}
+
+div.stButton > button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 191, 165, 0.5);
+    background: linear-gradient(135deg, #00D4B8 0%, #00BFA5 100%);
+}
+
+div.stButton > button:active {
+    transform: translateY(0px);
+}
+
+/* File Uploader Styling */
+.stFileUploader {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px dashed rgba(0, 191, 165, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.stFileUploader:hover {
+    border-color: rgba(0, 191, 165, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.stFileUploader label {
+    color: #00BFA5 !important;
+    font-weight: 600;
+}
+
+/* Select Box Styling */
+.stSelectbox label {
+    color: #00BFA5 !important;
+    font-weight: 600;
+}
+
+/* Header Styling */
+h1, h2, h3 {
+    color: #ffffff;
+    font-weight: 700;
+    margin-top: 5px;
+    margin-bottom: 0.1px;
+}
+
+h1 {
+    background: linear-gradient(135deg, #00BFA5 0%, #00D4B8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+
+
+/* Chat Messages with Glassmorphism */
+.chat-message-wrapper {
+    display: flex;
+    width: 100%;
+    margin: 4px 0;
+    clear: both;
+}
+
+.chat-message-wrapper.user {
+    justify-content: flex-end;
+}
+
+.chat-message-wrapper.bot {
+    justify-content: flex-start;
+}
+
+.user-msg { 
+    background: linear-gradient(135deg, rgba(0, 191, 165, 0.15) 0%, rgba(0, 191, 165, 0.1) 100%);
+    backdrop-filter: blur(10px);
+    color: #ffffff; 
+    padding: 12px 18px; 
+    border-radius: 18px 18px 4px 18px;
+    max-width: 70%;
+    display: inline-block;
+    font-size: 15px; 
+    font-family: 'Inter', sans-serif;
+    border: 1px solid rgba(0, 191, 165, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 191, 165, 0.1);
+    animation: slideInRight 0.3s ease;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.bot-msg { 
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    color: #ffffff; 
+    padding: 12px 18px; 
+    border-radius: 18px 18px 18px 4px;
+    max-width: 70%;
+    display: inline-block;
+    font-size: 15px; 
+    font-family: 'Inter', sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: slideInLeft 0.3s ease;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Sources Badge */
+.source-badge {
+    display: inline-block;
+    background: rgba(0, 191, 165, 0.2);
+    color: #00BFA5;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+    border: 1px solid rgba(0, 191, 165, 0.3);
+}
+
+/* Animations */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Textarea Styling */
+div.stTextArea > div {
+    border-radius: 50px !important;
+    overflow: hidden; /* pastikan textarea tidak keluar */
+    background: rgb(23, 22, 22) !important;
+    border: none;
+    color: #ffffff9a !important;
+    margin-top: 1px;
+}
+
+div.stTextArea textarea {
+    font-size: 15px !important;
+    font-family: 'Inter', sans-serif !important;
+    background: rgb(23, 22, 22) !important;
+    border: 2px solid rgba(0, 191, 165, 0.2) !important;
+    border-radius: 50px !important;
+    color: #ffffff !important;
+    padding: 20px !important;
+    transition: all 0.3s ease !important;
+    caret-color: #00BFA5
+}
+
+div.stTextArea textarea:focus {
+    border-color: rgba(0, 191, 165, 0.6) !important;
+    box-shadow: 0 0 20px rgba(0, 191, 165, 0.2) !important;
+    background:rgb(23, 22, 22)  !important;
+}
+
+div.stTextArea textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+    opacity: 1;
+} 
+
+div.stTextArea > div > span[data-testid="stTextAreaDescription"] {
+    color: rgba(255, 255, 255, 0.5) !important; /* putih transparan */
+    opacity: 1;
+}
+
+
+
+
+
+/* Success/Warning Messages */
+.element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stAlert"] {
+    border-radius: 12px;
+    border-left: 4px solid #00BFA5;
+    background: rgba(0, 191, 165, 0.1);
+}
+
+/* Divider Styling */
+/* style.css */
+.div-hr {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0, 191, 165, 0.3), transparent);
+    margin: 2rem 0;
+    border: none;
+}
+
+
+
+/* Chat Container - Target Streamlit's container element */
+div[data-testid="stVerticalBlock"]:has(.chat-message-wrapper) {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Streamlit container with height parameter */
+div[data-testid="stVerticalBlockBorderWrapper"] {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    padding: 0.5rem !important;
+}
+
+/* Chat messages wrapper */
+.chat-messages-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Legacy chat-container class (untuk backward compatibility) */
+.chat-container {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    min-height: 400px;
+    max-height: 500px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 191, 165, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 191, 165, 0.5);
+}
+
+/* Info Box */
+.info-box {
+    background: rgba(0, 191, 165, 0.1);
+    border: 1px solid rgba(0, 191, 165, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
