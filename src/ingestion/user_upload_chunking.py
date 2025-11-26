@@ -11,7 +11,7 @@ import json
 import re
 from pathlib import Path
 from datetime import datetime
-from ingestion_module import DataIngestionModule
+from .ingestion_module import DataIngestionModule
 
 
 def normalize_text(text):
@@ -111,6 +111,50 @@ def chunk_dataframe_data(df, file_name, chunk_size, chunk_overlap):
                     'chunk_length': len(chunk_text),
                     'token_count': len(chunk_text) // 4
                 })
+    
+    return chunks
+
+
+def process_user_files(text_content, source_name, chunk_size=512, chunk_overlap=50):
+    """
+    Simple function to chunk text content for indexing (used by UI upload).
+    
+    Args:
+        text_content (str): Text content to chunk
+        source_name (str): Name of source file
+        chunk_size (int): Max characters per chunk
+        chunk_overlap (int): Overlap characters
+    
+    Returns:
+        list: List of chunk dictionaries ready for indexing
+    """
+    # For simple text content, just chunk it directly
+    chunks = []
+    # Split by double newlines to get paragraphs
+    paragraphs = text_content.split("\r\n\r\n")
+    if not paragraphs or len(paragraphs) == 1:
+        paragraphs = [text_content]
+    
+    chunk_idx = 0
+    
+    for para_idx, para in enumerate(paragraphs):
+        if len(para.strip()) < 20:
+            continue
+        
+        normalized = normalize_text(para)
+        if normalized:
+            para_chunks = split_long_text(normalized, chunk_size, chunk_overlap)
+            
+            for local_idx, chunk_text in enumerate(para_chunks):
+                chunks.append({
+                    'text': chunk_text,
+                    'metadata': {
+                        'source': source_name,
+                        'chunk_id': f"{source_name}_chunk_{chunk_idx}",
+                        'chunk_index': chunk_idx
+                    }
+                })
+                chunk_idx += 1
     
     return chunks
 

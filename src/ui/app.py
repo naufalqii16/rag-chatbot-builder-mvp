@@ -368,15 +368,78 @@ if st.session_state["current_page"] == "home":
     
     st.markdown("&nbsp;")
     
-    # File upload section (for future enhancement)
-    st.subheader("📁 Upload Additional Documents (Coming Soon)")
+    # File upload section (ACTIVE NOW!)
+    st.subheader("📁 Upload Additional Documents")
+    st.markdown("Upload your files to add them to the knowledge base. Supported formats: **PDF, CSV, TXT, XLSX, DOCX**")
+    
     uploaded_files = st.file_uploader(
-        "Drag & drop your files (PDF, CSV, TXT)",
+        "Drag & drop your files here or click to browse",
         accept_multiple_files=True,
-        type=["pdf", "csv", "txt"],
-        disabled=True,
-        help="This feature will allow you to add more documents to the knowledge base."
+        type=["pdf", "csv", "txt", "xlsx", "xls", "docx", "doc"],
+        help="Upload documents to automatically chunk and index them into the vector database."
     )
+    
+    # Process uploaded files
+    if uploaded_files:
+        st.markdown("---")
+        st.subheader(f"📤 Uploaded Files ({len(uploaded_files)})")
+        
+        # Display uploaded files
+        for idx, uploaded_file in enumerate(uploaded_files, 1):
+            file_size = uploaded_file.size / 1024  # KB
+            st.markdown(f"**{idx}.** `{uploaded_file.name}` ({file_size:.2f} KB)")
+        
+        st.markdown("&nbsp;")
+        
+        # Process button
+        if st.button("🚀 Process & Index Files", use_container_width=True, type="primary"):
+            import sys
+            sys.path.insert(0, str(Path(__file__).parent.parent))
+            from ingestion.ingestion_module import process_and_index_files
+            
+            with st.spinner("📝 Processing documents..."):
+                try:
+                    # Save uploaded files temporarily
+                    temp_dir = Path("data/temp_uploads")
+                    temp_dir.mkdir(parents=True, exist_ok=True)
+                    
+                    file_paths = []
+                    for uploaded_file in uploaded_files:
+                        file_path = temp_dir / uploaded_file.name
+                        with open(file_path, "wb") as f:
+                            f.write(uploaded_file.getbuffer())
+                        file_paths.append(file_path)
+                    
+                    # Process and index
+                    st.info("🔄 Chunking documents...")
+                    result = process_and_index_files(file_paths)
+                    
+                    if result.get('success', False):
+                        st.success(f"✅ Successfully processed {result['total_chunks']} chunks from {len(uploaded_files)} file(s)!")
+                        st.balloons()
+                        
+                        # Show stats
+                        st.markdown("### 📊 Indexing Statistics:")
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            st.metric("Files Processed", len(uploaded_files))
+                        with col2:
+                            st.metric("Total Chunks", result['total_chunks'])
+                        with col3:
+                            st.metric("Vectors Added", result.get('vectors_indexed', result['total_chunks']))
+                        
+                        # Clean up temp files
+                        import shutil
+                        shutil.rmtree(temp_dir)
+                        
+                    else:
+                        st.error(f"❌ Error: {result.get('error', 'Unknown error')}")
+                        
+                except Exception as e:
+                    st.error(f"❌ Error processing files: {str(e)}")
+                    import traceback
+                    with st.expander("Show error details"):
+                        st.code(traceback.format_exc())
     
     st.markdown("&nbsp;")
     st.markdown("---")
