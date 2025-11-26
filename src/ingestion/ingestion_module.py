@@ -540,7 +540,7 @@ def process_and_index_files(file_paths: List[Path]) -> Dict[str, Any]:
             }
         
         # Step 2: Build index (embed and store in Qdrant)
-        builder = IndexBuilder()
+        builder = IndexBuilder(collection_name=settings.QDRANT_USER_UPLOAD_COLLECTION)
         success = builder.build_index(
             chunks=all_chunks,
             batch_size=20,

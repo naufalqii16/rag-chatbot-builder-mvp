@@ -17,5 +17,8 @@ python-docx>=1.0.0
 chardet>=5.0.0
 openpyxl>=3.1.0
 xlrd>=2.0.0
-sentence-transformers
+# Fix for PyTorch meta tensor issue - use compatible versions
+sentence-transformers>=2.7.0
+torch>=2.0.0
+transformers>=4.36.0
 

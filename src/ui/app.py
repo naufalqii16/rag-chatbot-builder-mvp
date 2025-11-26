@@ -30,26 +30,43 @@ st.set_page_config(
 # ----------------------------
 if "current_page" not in st.session_state:
     st.session_state["current_page"] = "home"
-if "chat_history" not in st.session_state:
-    st.session_state["chat_history"] = [
-        ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your dataset.")
+if "glossary_chat_history" not in st.session_state:
+    st.session_state["glossary_chat_history"] = [
+        ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your glossary dataset.")
     ]
-if "query_engine" not in st.session_state:
-    st.session_state["query_engine"] = None
+if "user_upload_chat_history" not in st.session_state:
+    st.session_state["user_upload_chat_history"] = [
+        ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your uploaded documents.")
+    ]
+if "glossary_query_engine" not in st.session_state:
+    st.session_state["glossary_query_engine"] = None
+if "user_upload_query_engine" not in st.session_state:
+    st.session_state["user_upload_query_engine"] = None
 if "is_loading" not in st.session_state:
     st.session_state["is_loading"] = False
+if "active_chatbot" not in st.session_state:
+    st.session_state["active_chatbot"] = "glossary"  # Default to glossary
 
 # ----------------------------
-# Initialize RAG Engine (on first load)
+# Initialize RAG Engines (on first load)
 # ----------------------------
 @st.cache_resource
-def initialize_rag_engine():
-    """Initialize RAG engine once and cache it."""
+def initialize_glossary_engine():
+    """Initialize RAG engine for Glossary data."""
     try:
-        engine = QueryEngine()
-        return engine, True, "✅ RAG engine initialized successfully!"
+        engine = QueryEngine(collection_name=settings.QDRANT_GLOSSARY_COLLECTION)
+        return engine, True, "✅ Glossary RAG engine initialized!"
     except Exception as e:
-        return None, False, f"❌ Error initializing RAG: {str(e)}"
+        return None, False, f"❌ Error initializing Glossary RAG: {str(e)}"
+
+@st.cache_resource
+def initialize_user_upload_engine():
+    """Initialize RAG engine for User Upload data."""
+    try:
+        engine = QueryEngine(collection_name=settings.QDRANT_USER_UPLOAD_COLLECTION)
+        return engine, True, "✅ User Upload RAG engine initialized!"
+    except Exception as e:
+        return None, False, f"❌ Error initializing User Upload RAG: {str(e)}"
 
 # ----------------------------
 # Enhanced Dark Mode CSS with Glassmorphism & Animations
@@ -336,13 +353,37 @@ else:
         st.session_state["current_page"] = "home"
         st.rerun()
 
+# Chatbot selection
+if st.session_state["current_page"] == "chatbot":
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("### 🤖 Pilih Chatbot:")
+    
+    col1, col2 = st.sidebar.columns(2)
+    with col1:
+        if st.button("📚 Glossary", 
+                    use_container_width=True, 
+                    type="primary" if st.session_state["active_chatbot"] == "glossary" else "secondary"):
+            st.session_state["active_chatbot"] = "glossary"
+            st.rerun()
+    with col2:
+        if st.button("📁 User Docs", 
+                    use_container_width=True,
+                    type="primary" if st.session_state["active_chatbot"] == "user_upload" else "secondary"):
+            st.session_state["active_chatbot"] = "user_upload"
+            st.rerun()
+
 # Clear chat button
 if st.session_state["current_page"] == "chatbot":
     st.sidebar.markdown("---")
     if st.sidebar.button("🗑️ Clear Chat History", use_container_width=True):
-        st.session_state["chat_history"] = [
-            ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your dataset.")
-        ]
+        if st.session_state["active_chatbot"] == "glossary":
+            st.session_state["glossary_chat_history"] = [
+                ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your glossary dataset.")
+            ]
+        else:
+            st.session_state["user_upload_chat_history"] = [
+                ("bot", "Hi! I'm your RAG-powered assistant. Ask me anything from your uploaded documents.")
+            ]
         st.rerun()
 
 # ----------------------------
@@ -460,15 +501,27 @@ if st.session_state["current_page"] == "home":
 # Chatbot page
 # ----------------------------
 elif st.session_state["current_page"] == "chatbot":
-    st.header("💬 RAG Chatbot")
+    # Show which chatbot is active
+    chatbot_name = "📚 Data Glossary" if st.session_state["active_chatbot"] == "glossary" else "📁 User Documents"
+    st.header(f"💬 RAG Chatbot - {chatbot_name}")
     st.markdown("---")
     
+    # Get current engine and chat history based on active chatbot
+    if st.session_state["active_chatbot"] == "glossary":
+        engine_key = "glossary_query_engine"
+        chat_history_key = "glossary_chat_history"
+        initialize_func = initialize_glossary_engine
+    else:
+        engine_key = "user_upload_query_engine"
+        chat_history_key = "user_upload_chat_history"
+        initialize_func = initialize_user_upload_engine
+    
     # Initialize RAG engine if not already done
-    if st.session_state["query_engine"] is None:
-        with st.spinner("🔧 Initializing RAG engine..."):
-            engine, success, message = initialize_rag_engine()
+    if st.session_state[engine_key] is None:
+        with st.spinner(f"🔧 Initializing {chatbot_name} engine..."):
+            engine, success, message = initialize_func()
             if success:
-                st.session_state["query_engine"] = engine
+                st.session_state[engine_key] = engine
                 st.success(message)
             else:
                 st.error(message)
@@ -480,7 +533,7 @@ elif st.session_state["current_page"] == "chatbot":
 
     # Display chat history
     with chat_container:
-        for sender, msg in st.session_state["chat_history"]:
+        for sender, msg in st.session_state[chat_history_key]:
             # Escape HTML and replace newlines with <br>
             escaped_msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
             if sender == "user":
@@ -501,9 +554,9 @@ elif st.session_state["current_page"] == "chatbot":
         user_input = st.text_area(
             "You:", 
             value="",
-            key="input_box",
+            key=f"input_box_{st.session_state['active_chatbot']}",
             label_visibility="collapsed",
-            placeholder="💭 Type your question here... (e.g., 'Which tables use incremental extraction?')",
+            placeholder=f"💭 Ketik pertanyaan Anda tentang {chatbot_name}...",
             height=100
         )
     
@@ -515,13 +568,13 @@ elif st.session_state["current_page"] == "chatbot":
     # ----------------------------
     if send_clicked and user_input.strip():
         # Add user message to chat
-        st.session_state["chat_history"].append(("user", user_input))
+        st.session_state[chat_history_key].append(("user", user_input))
         
         # Show loading state
         with st.spinner("🤖 Thinking..."):
             try:
                 # Query the RAG engine
-                engine = st.session_state["query_engine"]
+                engine = st.session_state[engine_key]
                 result = engine.query(user_input)
                 
                 if result.get('success', False):
@@ -535,44 +588,52 @@ elif st.session_state["current_page"] == "chatbot":
                         response = f"{answer}\n\n📚 Sources: {num_sources} chunks (avg score: {avg_score:.2f})"
                     else:
                         # No sources found
-                        response = f"{answer}\n\n💡 Tip: Try rephrasing your question or lower MIN_SIMILARITY_SCORE in .env"
+                        response = f"{answer}\n\n💡 Tip: Coba ubah pertanyaan atau turunkan MIN_SIMILARITY_SCORE di .env"
                     
-                    st.session_state["chat_history"].append(("bot", response))
+                    st.session_state[chat_history_key].append(("bot", response))
                 else:
                     error_msg = f"❌ Sorry, I encountered an error: {result.get('error', 'Unknown error')}"
-                    st.session_state["chat_history"].append(("bot", error_msg))
+                    st.session_state[chat_history_key].append(("bot", error_msg))
                 
             except Exception as e:
                 import traceback
                 error_detail = traceback.format_exc()
                 error_msg = f"❌ Error processing your question: {str(e)}"
-                st.session_state["chat_history"].append(("bot", error_msg))
+                st.session_state[chat_history_key].append(("bot", error_msg))
         
         # Rerun to update UI
         st.rerun()
 
     # ----------------------------
-    # Example questions
+    # Example questions (different for each chatbot)
     # ----------------------------
     st.markdown("---")
     st.markdown("### 💡 Example Questions:")
     
-    example_questions = [
-        "Which tables use incremental extraction with watermark datetime?",
-        "What are the tables in the EMR database?",
-        "Show me tables with full load extraction mode",
-        "Which tables have UUID as primary key?"
-    ]
+    if st.session_state["active_chatbot"] == "glossary":
+        example_questions = [
+            "Which tables use incremental extraction with watermark datetime?",
+            "What are the tables in the EMR database?",
+            "Show me tables with full load extraction mode",
+            "Which tables have UUID as primary key?"
+        ]
+    else:
+        example_questions = [
+            "Apa isi dari dokumen yang saya upload?",
+            "Berikan ringkasan dari dokumen ini",
+            "Apa poin-poin penting dalam dokumen?",
+            "Jelaskan topik utama dalam dokumen"
+        ]
     
     cols = st.columns(2)
     for idx, question in enumerate(example_questions):
         with cols[idx % 2]:
-            if st.button(question, key=f"example_{idx}", use_container_width=True):
-                st.session_state["chat_history"].append(("user", question))
+            if st.button(question, key=f"example_{st.session_state['active_chatbot']}_{idx}", use_container_width=True):
+                st.session_state[chat_history_key].append(("user", question))
                 
                 with st.spinner("🤖 Thinking..."):
                     try:
-                        engine = st.session_state["query_engine"]
+                        engine = st.session_state[engine_key]
                         result = engine.query(question)
                         
                         if result['success']:
@@ -583,12 +644,12 @@ elif st.session_state["current_page"] == "chatbot":
                             response = f"{answer}\n\n"
                             response += f"📚 Sources: {num_sources} chunks (avg score: {avg_score:.2f})"
                             
-                            st.session_state["chat_history"].append(("bot", response))
+                            st.session_state[chat_history_key].append(("bot", response))
                         else:
                             error_msg = f"❌ Sorry, I encountered an error: {result.get('error', 'Unknown error')}"
-                            st.session_state["chat_history"].append(("bot", error_msg))
+                            st.session_state[chat_history_key].append(("bot", error_msg))
                     except Exception as e:
                         error_msg = f"❌ Error: {str(e)}"
-                        st.session_state["chat_history"].append(("bot", error_msg))
+                        st.session_state[chat_history_key].append(("bot", error_msg))
                 
                 st.rerun()

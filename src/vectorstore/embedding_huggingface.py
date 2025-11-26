@@ -87,7 +87,55 @@ class HuggingFaceEmbedding:
             print(f"   Quality: {self.MODELS[model_name]['quality']}")
             print(f"   Speed: {self.MODELS[model_name]['speed']}")
         
-        self.model = SentenceTransformer(model_name, device=device)
+        # Fix for PyTorch 2.x meta tensor issue
+        # Set environment variable to avoid meta device issues
+        import os
+        os.environ['PYTORCH_ENABLE_MPS_FALLBACK'] = '1'
+        
+        # Try multiple loading strategies
+        import torch
+        try:
+            # Strategy 1: Load with trust_remote_code
+            print(f"   Loading model (strategy 1)...")
+            self.model = SentenceTransformer(
+                model_name, 
+                device=device,
+                trust_remote_code=True
+            )
+        except Exception as e1:
+            try:
+                # Strategy 2: Force CPU load first
+                print(f"   Trying alternative loading (strategy 2)...")
+                self.model = SentenceTransformer(model_name, device='cpu')
+                if device and device != 'cpu':
+                    self.model = self.model.to(device)
+            except Exception as e2:
+                try:
+                    # Strategy 3: Load with local_files_only=False
+                    print(f"   Trying alternative loading (strategy 3)...")
+                    self.model = SentenceTransformer(
+                        model_name, 
+                        device='cpu',
+                        local_files_only=False
+                    )
+                    if device and device != 'cpu':
+                        # Use to_empty() method to avoid meta tensor issue
+                        import torch.nn as nn
+                        for module in self.model.modules():
+                            if isinstance(module, nn.Module):
+                                module._backward_hooks.clear()
+                        self.model = self.model.to(device)
+                except Exception as e3:
+                    print(f"❌ All loading strategies failed:")
+                    print(f"   Strategy 1: {str(e1)[:100]}")
+                    print(f"   Strategy 2: {str(e2)[:100]}")
+                    print(f"   Strategy 3: {str(e3)[:100]}")
+                    raise Exception(
+                        "Failed to load model. Please try:\n"
+                        "   1. Update packages: pip install -U sentence-transformers torch transformers\n"
+                        "   2. Clear model cache: rm -rf ~/.cache/huggingface/\n"
+                        "   3. Use CPU mode by setting device='cpu'"
+                    )
         
         # Get embedding dimension
         self.dimension = self.model.get_sentence_embedding_dimension()

@@ -69,7 +69,11 @@ class Settings:
     QDRANT_URL: Optional[str] = os.getenv("QDRANT_URL")
     QDRANT_API_KEY: Optional[str] = os.getenv("QDRANT_API_KEY")
     
-    # Collection name
+    # Collection names - separate collections for glossary and user uploads
+    QDRANT_GLOSSARY_COLLECTION: str = os.getenv("QDRANT_GLOSSARY_COLLECTION", "glossary_collection")
+    QDRANT_USER_UPLOAD_COLLECTION: str = os.getenv("QDRANT_USER_UPLOAD_COLLECTION", "user_upload_collection")
+    
+    # Backward compatibility
     QDRANT_COLLECTION_NAME: str = os.getenv("QDRANT_COLLECTION_NAME", "rag_chatbot_chunks")
     
     # ==================== CHUNKING CONFIGURATION ====================
@@ -177,7 +181,8 @@ class Settings:
         else:
             print(f"   URL: {cls.QDRANT_URL}")
             print(f"   API Key: {'✅ Set' if cls.QDRANT_API_KEY else '❌ Not Set'}")
-        print(f"   Collection: {cls.QDRANT_COLLECTION_NAME}")
+        print(f"   Glossary Collection: {cls.QDRANT_GLOSSARY_COLLECTION}")
+        print(f"   User Upload Collection: {cls.QDRANT_USER_UPLOAD_COLLECTION}")
         
         print(f"\n🔍 Retrieval:")
         print(f"   Top-K: {cls.RETRIEVAL_TOP_K}")

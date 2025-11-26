@@ -69,9 +69,9 @@ def index_dataglossary(
     print(f"⚙️  Batch size: {batch_size}")
     print(f"🔄 Recreate collection: {recreate_collection}\n")
     
-    # Initialize index builder
+    # Initialize index builder with glossary collection
     try:
-        builder = IndexBuilder()
+        builder = IndexBuilder(collection_name=settings.QDRANT_GLOSSARY_COLLECTION)
         
         # Load chunks
         print("="*70)
@@ -107,7 +107,10 @@ def index_dataglossary(
             
             # Get statistics
             from vectorstore.qdrant_store import get_qdrant_client
-            client = get_qdrant_client(create_collection=False)
+            client = get_qdrant_client(
+                collection_name=settings.QDRANT_GLOSSARY_COLLECTION,
+                create_collection=False
+            )
             info = client.get_collection_info()
             client.close()
             
