@@ -115,23 +115,6 @@ def chunk_dataframe_data(df, file_name, chunk_size, chunk_overlap):
     return chunks
 
 
-def process_user_files(text_content, source_name, chunk_size=512, chunk_overlap=50):
-    """
-    Simple function to chunk text content for indexing.
-    
-    Args:
-        text_content (str): Text content to chunk
-        source_name (str): Name of source file
-        chunk_size (int): Max characters per chunk
-        chunk_overlap (int): Overlap characters
-    
-    Returns:
-        list: List of chunk dictionaries
-    """
-    chunks = chunk_text_data(text_content, source_name, chunk_size, chunk_overlap)
-    return chunks
-
-
 def process_user_file(file_name, chunk_size=512, chunk_overlap=50):
     """
     Main function to process user file: cleaning + chunking.
