@@ -6,3 +6,5 @@ dataIngestion.ipynb
 test_usage.py
 __pycache__/
 vectorstore/
+app_temp2.py
+app_temp3.py

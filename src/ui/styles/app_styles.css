@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-
+/* Reset Header */
 header[data-testid="stHeader"] {
     background: transparent !important;
     height: 0 !important;
@@ -12,7 +12,6 @@ main[data-testid="stAppViewContainer"] {
     padding-top: 0 !important;
 }
 
-
 /* Main App Styling */
 .stApp { 
     background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
@@ -20,21 +19,37 @@ main[data-testid="stAppViewContainer"] {
     font-family: 'Inter', sans-serif;
 }
 
-/* Sidebar Styling */
+/* Hide Sidebar */
 section[data-testid="stSidebar"] {
-    background: rgba(20, 20, 30, 0.8);
-    backdrop-filter: blur(10px);
-    border-right: 1px solid rgba(0, 191, 165, 0.1);
+    display: none !important;
 }
 
-section[data-testid="stSidebar"] h1 {
-    color: #00BFA5;
+/* Header Styling */
+h1, h2, h3 {
+    color: #ffffff;
     font-weight: 700;
-    text-align: center;
-    padding: 1rem 0;
-    border-bottom: 2px solid rgba(0, 191, 165, 0.3);
-    margin-bottom: 2rem;
+    margin-top: 5px;
+    margin-bottom: 0.1px;
 }
+
+h1 {
+    color: #ffffff !important; /* Putih */
+    font-weight: 700;
+    margin-top: 5px;
+    margin-bottom: 0.1px;
+}
+
+/* h1.css-10trblm,
+h1[data-testid="stHeading"],
+.stMarkdown h1,
+div[data-testid="stMarkdownContainer"] h1 {
+    color: #ffffff
+    font-weight: 700 !important;
+    background: linear-gradient(135deg, #00BFA5 0%, #00D4B8 100%);
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+} */
 
 /* Button Styling with Hover Effects */
 div.stButton > button {
@@ -59,7 +74,57 @@ div.stButton > button:active {
     transform: translateY(0px);
 }
 
+/* Secondary button style */
+div.stButton > button[kind="secondary"] {
+    background: linear-gradient(135deg, rgba(0, 191, 165, 0.2) 0%, rgba(0, 137, 123, 0.2) 100%);
+    border: 2px solid rgba(0, 191, 165, 0.5);
+}
+
+div.stButton > button[kind="secondary"]:hover {
+    background: linear-gradient(135deg, rgba(0, 191, 165, 0.3) 0%, rgba(0, 137, 123, 0.3) 100%);
+    border-color: rgba(0, 191, 165, 0.8);
+}
+
+/* Home button special styling */
+/* div.stButton > button[aria-label*="home_button"], div.stButton > button[data-testid*="home"] 
+{ background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%); 
+    font-size: 24px; padding: 0.5rem; min-width: 60px; }*/
+
+
+
+
+div.stButton > button[data-baseweb="button"] {
+    background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%) !important;
+}
 /* File Uploader Styling */
+.stFileUploader {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px dashed rgba(0, 191, 165, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+div[data-testid="stFileUploadDropzone"],
+div[data-testid="stFileUploaderDropzone"] {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 2px dashed rgba(0, 191, 165, 0.3) !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease !important;
+}
+
+.stFileUploader:hover {
+    border-color: rgba(0, 191, 165, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.stFileUploader label {
+    color: #00BFA5 !important;
+    font-weight: 600;
+}
+
+/* Upload Container */
+/* File Uploader Container */
 .stFileUploader {
     background: rgba(255, 255, 255, 0.03);
     border: 2px dashed rgba(0, 191, 165, 0.3);
@@ -73,34 +138,102 @@ div.stButton > button:active {
     background: rgba(255, 255, 255, 0.05);
 }
 
+/* File Uploader Label */
 .stFileUploader label {
     color: #00BFA5 !important;
     font-weight: 600;
 }
 
-/* Select Box Styling */
-.stSelectbox label {
-    color: #00BFA5 !important;
-    font-weight: 600;
+/* File Uploader Text/Instructions */
+.stFileUploader [data-testid="stFileUploaderDropzoneInstructions"] {
+    color: rgba(255, 255, 255, 0.7) !important;
 }
 
-/* Header Styling */
-h1, h2, h3 {
-    color: #ffffff;
-    font-weight: 700;
-    margin-top: 5px;
-    margin-bottom: 0.1px;
+.stFileUploader small {
+    color: rgba(255, 255, 255, 0.5) !important;
 }
 
-h1 {
-    background: linear-gradient(135deg, #00BFA5 0%, #00D4B8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+/* ============================================ */
+/* BROWSE FILES BUTTON - Custom Styling */
+/* ============================================ */
+
+/* Target Browse files button */
+.stFileUploader button,
+.stFileUploader section button,
+div[data-testid="stFileUploadDropzone"] button,
+div[data-testid="stFileUploaderDropzone"] button {
+    background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 0.75rem 2rem !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(0, 191, 165, 0.3) !important;
+    cursor: pointer !important;
 }
 
+/* Browse files button hover */
+.stFileUploader button:hover,
+.stFileUploader section button:hover,
+div[data-testid="stFileUploadDropzone"] button:hover,
+div[data-testid="stFileUploaderDropzone"] button:hover {
+    background: linear-gradient(135deg, #00D4B8 0%, #00BFA5 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 25px rgba(0, 191, 165, 0.5) !important;
+}
 
+/* Drag & drop zone styling */
+/* div[data-testid="stFileUploadDropzone"],
+div[data-testid="stFileUploaderDropzone"] {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 2px dashed rgba(0, 191, 165, 0.3) !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease !important;
+} */
 
+/* Drag & drop zone on hover/drag */
+/* div[data-testid="stFileUploadDropzone"]:hover,
+div[data-testid="stFileUploaderDropzone"]:hover {
+    border-color: rgba(0, 191, 165, 0.6) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+} */
+
+/* Uploaded file item styling */
+.stFileUploader [data-testid="stFileUploaderFile"] {
+    background: rgba(0, 191, 165, 0.1) !important;
+    border: 1px solid rgba(0, 191, 165, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0.5rem 0 !important;
+    color: #ffffff !important;
+}
+
+/* Delete button (X) on uploaded files */
+
+.stFileUploader [data-testid="stFileUploaderDeleteBtn"] {
+    background: rgba(255, 59, 48, 0.2) !important;
+    color: #ff3b30 !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+}
+.stFileUploader button[data-testid="stFileUploaderDeleteBtn"]::before {
+    background: transparent !important;
+}
+
+.stFileUploader [data-testid="stFileUploaderDeleteBtn"]:hover {
+    background: rgba(255, 59, 48, 0.4) !important;
+}
+
+/* Upload container wrapper (optional custom wrapper) */
+.upload-container {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 191, 165, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
 /* Chat Messages with Glassmorphism */
 .chat-message-wrapper {
     display: flex;
@@ -151,19 +284,6 @@ h1 {
     overflow-wrap: break-word;
 }
 
-/* Sources Badge */
-.source-badge {
-    display: inline-block;
-    background: rgba(0, 191, 165, 0.2);
-    color: #00BFA5;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-top: 8px;
-    border: 1px solid rgba(0, 191, 165, 0.3);
-}
-
 /* Animations */
 @keyframes slideInRight {
     from {
@@ -204,7 +324,7 @@ h1 {
 /* Textarea Styling */
 div.stTextArea > div {
     border-radius: 50px !important;
-    overflow: hidden; /* pastikan textarea tidak keluar */
+    overflow: hidden;
     background: rgb(23, 22, 22) !important;
     border: none;
     color: #ffffff9a !important;
@@ -220,13 +340,13 @@ div.stTextArea textarea {
     color: #ffffff !important;
     padding: 20px !important;
     transition: all 0.3s ease !important;
-    caret-color: #00BFA5
+    caret-color: #00BFA5;
 }
 
 div.stTextArea textarea:focus {
     border-color: rgba(0, 191, 165, 0.6) !important;
     box-shadow: 0 0 20px rgba(0, 191, 165, 0.2) !important;
-    background:rgb(23, 22, 22)  !important;
+    background: rgb(23, 22, 22) !important;
 }
 
 div.stTextArea textarea::placeholder {
@@ -235,13 +355,9 @@ div.stTextArea textarea::placeholder {
 } 
 
 div.stTextArea > div > span[data-testid="stTextAreaDescription"] {
-    color: rgba(255, 255, 255, 0.5) !important; /* putih transparan */
+    color: rgba(255, 255, 255, 0.5) !important;
     opacity: 1;
 }
-
-
-
-
 
 /* Success/Warning Messages */
 .element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stAlert"] {
@@ -251,7 +367,6 @@ div.stTextArea > div > span[data-testid="stTextAreaDescription"] {
 }
 
 /* Divider Styling */
-/* style.css */
 .div-hr {
     height: 2px;
     background: linear-gradient(90deg, transparent, rgba(0, 191, 165, 0.3), transparent);
@@ -259,9 +374,7 @@ div.stTextArea > div > span[data-testid="stTextAreaDescription"] {
     border: none;
 }
 
-
-
-/* Chat Container - Target Streamlit's container element */
+/* Chat Container */
 div[data-testid="stVerticalBlock"]:has(.chat-message-wrapper) {
     background: rgba(255, 255, 255, 0.02);
     border-radius: 16px;
@@ -270,33 +383,11 @@ div[data-testid="stVerticalBlock"]:has(.chat-message-wrapper) {
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Streamlit container with height parameter */
 div[data-testid="stVerticalBlockBorderWrapper"] {
     background: rgba(255, 255, 255, 0.02) !important;
     border-radius: 16px !important;
     border: 1px solid rgba(255, 255, 255, 0.05) !important;
     padding: 0.5rem !important;
-}
-
-/* Chat messages wrapper */
-.chat-messages-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-/* Legacy chat-container class (untuk backward compatibility) */
-.chat-container {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 16px;
-    padding: 1.5rem;
-    margin-bottom: 0.5px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    min-height: 400px;
-    max-height: 500px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
 }
 
 /* Custom Scrollbar */
@@ -324,6 +415,69 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     background: rgba(0, 191, 165, 0.1);
     border: 1px solid rgba(0, 191, 165, 0.3);
     border-radius: 12px;
-    padding: 1rem;
+    padding: 1.5rem;
     margin: 1rem 0;
+}
+
+.info-box h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #00BFA5;
+}
+
+.info-box ul, .info-box ol {
+    margin-left: 1.5rem;
+    line-height: 1.8;
+}
+
+.info-box ul li, .info-box ol li {
+    margin-bottom: 0.5rem;
+}
+
+.info-box table {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.info-box table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-box table td:first-child {
+    width: 40%;
+}
+
+/* Metrics */
+div[data-testid="stMetric"] {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 191, 165, 0.2);
+}
+
+div[data-testid="stMetric"] label {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    color: #00BFA5 !important;
+    font-weight: 700;
+}
+
+/* Expander */
+div[data-testid="stExpander"] {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}
+
+div[data-testid="stExpander"] summary {
+    color: #00BFA5;
+    font-weight: 600;
+}
+
+/* Spinner */
+div[data-testid="stSpinner"] > div {
+    border-top-color: #00BFA5 !important;
 }
