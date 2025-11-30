@@ -2,12 +2,15 @@
 RAG Chatbot Streamlit App - Redesigned
 ---------------------------------------
 Two-page structure: Home and Chat
+ULTRA-FIXED AUTO-SCROLL VERSION
 """
 
 
 import streamlit as st
+import streamlit.components.v1 as components
 import sys
 from pathlib import Path
+import time
 
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -21,7 +24,7 @@ from utils.style_loader import inject_custom_css
 # Page Configuration
 # ----------------------------
 st.set_page_config(
-    page_title="🧠 RAG Chatbot",
+    page_title="🧠 BitMate AI",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -45,6 +48,8 @@ if "query_engine" not in st.session_state:
     st.session_state["query_engine"] = None
 if "uploaded_files_list" not in st.session_state:
     st.session_state["uploaded_files_list"] = []
+if "scroll_trigger" not in st.session_state:
+    st.session_state["scroll_trigger"] = 0
 
 # ----------------------------
 # Initialize RAG Engine
@@ -62,12 +67,40 @@ def initialize_query_engine():
 # Helper function to reset chatbot
 # ----------------------------
 def reset_chatbot():
-    """Reset chatbot to initial state"""
+    """Reset chatbot to initial state - COMPLETE RESET including Qdrant data"""
+    try:
+        # Delete Qdrant collection to remove all old documents
+        from qdrant_client import QdrantClient
+        
+        if settings.QDRANT_MODE == "local":
+            client = QdrantClient(path=settings.QDRANT_PATH)
+        else:
+            client = QdrantClient(
+                url=settings.QDRANT_URL,
+                api_key=settings.QDRANT_API_KEY
+            )
+        
+        # Delete the collection if it exists
+        try:
+            client.delete_collection(collection_name=settings.QDRANT_USER_UPLOAD_COLLECTION)
+            print(f"✅ Deleted Qdrant collection: {settings.QDRANT_USER_UPLOAD_COLLECTION}")
+        except Exception as e:
+            print(f"⚠️ Collection doesn't exist or already deleted: {e}")
+        
+    except Exception as e:
+        print(f"❌ Error deleting Qdrant collection: {e}")
+    
+    # Reset all session state
     st.session_state["current_page"] = "home"
     st.session_state["chat_state"] = "upload"
     st.session_state["chat_history"] = []
     st.session_state["uploaded_files_list"] = []
-    # Don't reset query_engine (keep it cached)
+    st.session_state["scroll_trigger"] = 0
+    st.session_state["query_engine"] = None
+    
+    # Clear all caches
+    st.cache_resource.clear()
+    st.cache_data.clear()
 
 # ============================
 # HOME PAGE
@@ -77,7 +110,7 @@ if st.session_state["current_page"] == "home":
     # Header with Start Chat button
     col1, col2 = st.columns([6, 1])
     with col1:
-        st.title("🧠 RAG Chatbot")
+        st.title("🧠 BitMate AI")
     with col2:
         if st.button("💬 Start Chat", key="start_chat_top", use_container_width=True, type="primary"):
             st.session_state["current_page"] = "chat"
@@ -168,13 +201,12 @@ elif st.session_state["current_page"] == "chat":
     # Header with Home button
     col1, col2 = st.columns([1, 11])
     with col1:
-        if st.button("🏠", key="home_button",  use_container_width=True
-                     ):
+        if st.button("🏠", key="home_button", use_container_width=True):
             reset_chatbot()
             st.rerun()
   
     with col2:
-        st.title("💬 Chat with Your Documents")
+        st.title("💬 Chat with Your BitMate")
     
     st.markdown('<div class="div-hr"></div>', unsafe_allow_html=True)
     
@@ -203,13 +235,6 @@ elif st.session_state["current_page"] == "chat":
         
         # Display uploaded files
         if uploaded_files:
-            st.markdown("---")
-            st.subheader(f"📋 Files Selected ({len(uploaded_files)})")
-            
-            for idx, uploaded_file in enumerate(uploaded_files, 1):
-                file_size = uploaded_file.size / 1024  # KB
-                st.markdown(f"**{idx}.** `{uploaded_file.name}` ({file_size:.2f} KB)")
-            
             st.markdown("&nbsp;")
             
             # Process button
@@ -218,24 +243,47 @@ elif st.session_state["current_page"] == "chat":
                 if st.button("🚀 Process & Index Files", use_container_width=True, type="primary", key="process_btn"):
                     from ingestion.ingestion_module import process_and_index_files
                     
-                    with st.spinner("📝 Processing documents..."):
-                        try:
-                            # Save uploaded files temporarily
-                            temp_dir = Path("data/temp_uploads")
-                            temp_dir.mkdir(parents=True, exist_ok=True)
+                    # Create progress bar
+                    progress_text = st.empty()
+                    progress_bar = st.progress(0)
+                    
+                    try:
+                        # Step 1: Save files (20%)
+                        progress_text.text("📁 Saving uploaded files...")
+                        progress_bar.progress(20)
+                        
+                        temp_dir = Path("data/temp_uploads")
+                        temp_dir.mkdir(parents=True, exist_ok=True)
+                        
+                        file_paths = []
+                        for idx, uploaded_file in enumerate(uploaded_files):
+                            file_path = temp_dir / uploaded_file.name
+                            with open(file_path, "wb") as f:
+                                f.write(uploaded_file.getbuffer())
+                            file_paths.append(file_path)
                             
-                            file_paths = []
-                            for uploaded_file in uploaded_files:
-                                file_path = temp_dir / uploaded_file.name
-                                with open(file_path, "wb") as f:
-                                    f.write(uploaded_file.getbuffer())
-                                file_paths.append(file_path)
+                            # Update progress for each file
+                            file_progress = 20 + (idx + 1) / len(uploaded_files) * 20
+                            progress_bar.progress(int(file_progress))
+                        
+                        # Step 2: Process and index (40-80%)
+                        progress_text.markdown('<p style="color: white; font-size: 16px;">🔄 Chunking and indexing documents...</p>', unsafe_allow_html=True)
+                        progress_bar.progress(50)
+                        
+                        result = process_and_index_files(file_paths)
+                        progress_bar.progress(80)
+                        
+                        if result.get('success', False):
+                            # Step 3: Initialize engine (80-100%)
+                            progress_text.text("🔧 Initializing RAG engine...")
+                            progress_bar.progress(90)
                             
-                            # Process and index
-                            st.info("🔄 Chunking and indexing documents...")
-                            result = process_and_index_files(file_paths)
+                            engine, success, message = initialize_query_engine()
                             
-                            if result.get('success', False):
+                            if success:
+                                progress_bar.progress(100)
+                                progress_text.markdown('<p style="color: white; font-size: 16px;">✅ Processing complete!</p>', unsafe_allow_html=True)
+                                
                                 st.success(f"✅ Successfully processed {result['total_chunks']} chunks from {len(uploaded_files)} file(s)!")
                                 st.balloons()
                                 
@@ -256,27 +304,31 @@ elif st.session_state["current_page"] == "chat":
                                 import shutil
                                 shutil.rmtree(temp_dir)
                                 
-                                # Initialize engine
-                                st.info("🔧 Initializing RAG engine...")
-                                engine, success, message = initialize_query_engine()
-                                if success:
-                                    st.session_state["query_engine"] = engine
-                                    st.session_state["chat_history"] = [
-                                        ("bot", "Hi! Saya sudah membaca dokumen Anda. Silakan tanyakan apapun tentang isi dokumen! 📚")
-                                    ]
-                                    st.session_state["chat_state"] = "chat"
-                                    st.success("✅ Ready to chat!")
-                                    st.rerun()
-                                else:
-                                    st.error(message)
+                                # Set engine and chat state
+                                st.session_state["query_engine"] = engine
+                                st.session_state["chat_history"] = [
+                                    ("bot", "Hi! Saya sudah membaca dokumen Anda. Silakan tanyakan apapun tentang isi dokumen! 📚")
+                                ]
+                                st.session_state["chat_state"] = "chat"
+                                st.session_state["scroll_trigger"] = 1
+                                st.success("✅ Ready to chat!")
+                                st.rerun()
                             else:
-                                st.error(f"❌ Error: {result.get('error', 'Unknown error')}")
-                                
-                        except Exception as e:
-                            st.error(f"❌ Error processing files: {str(e)}")
-                            import traceback
-                            with st.expander("Show error details"):
-                                st.code(traceback.format_exc())
+                                progress_bar.empty()
+                                progress_text.empty()
+                                st.error(message)
+                        else:
+                            progress_bar.empty()
+                            progress_text.empty()
+                            st.error(f"❌ Error: {result.get('error', 'Unknown error')}")
+                            
+                    except Exception as e:
+                        progress_bar.empty()
+                        progress_text.empty()
+                        st.error(f"❌ Error processing files: {str(e)}")
+                        import traceback
+                        with st.expander("Show error details"):
+                            st.code(traceback.format_exc())
         else:
             st.info("👆 Pilih file untuk memulai")
     
@@ -284,7 +336,7 @@ elif st.session_state["current_page"] == "chat":
     # STATE 2: CHAT INTERFACE
     # ============================
     elif st.session_state["chat_state"] == "chat":
-        
+    
         # Initialize engine if not already done
         if st.session_state["query_engine"] is None:
             with st.spinner("🔧 Initializing RAG engine..."):
@@ -299,43 +351,166 @@ elif st.session_state["current_page"] == "chat":
                     st.error(message)
                     st.stop()
         
-        # Chat container
-        chat_container = st.container(height=400)
+        # Chat container with fixed height and unique ID
+        chat_container = st.container(height=500)
         
         with chat_container:
-            for sender, msg in st.session_state["chat_history"]:
+            for idx, (sender, msg) in enumerate(st.session_state["chat_history"]):
                 escaped_msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
                 if sender == "user":
-                    st.markdown(f'<div class="chat-message-wrapper user"><div class="user-msg">{escaped_msg}</div></div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="chat-message-wrapper user" data-msg-id="{idx}"><div class="user-msg">{escaped_msg}</div></div>', unsafe_allow_html=True)
                 else:
-                    st.markdown(f'<div class="chat-message-wrapper bot"><div class="bot-msg">{escaped_msg}</div></div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="chat-message-wrapper bot" data-msg-id="{idx}"><div class="bot-msg">{escaped_msg}</div></div>', unsafe_allow_html=True)
+            
+            # Add invisible marker at the end
+            st.markdown(f'<div id="chat-end-marker" style="height: 1px;" data-trigger="{st.session_state["scroll_trigger"]}"></div>', unsafe_allow_html=True)
         
-        st.markdown("&nbsp;")
+        # Reduced spacing
+        st.markdown('<div style="height: 8px;"></div>', unsafe_allow_html=True)
+        
+        # ============================================
+        # ULTRA-AGGRESSIVE AUTO-SCROLL
+        # ============================================
+        scroll_js = f"""
+        <script>
+        (function() {{
+            const scrollTrigger = {st.session_state["scroll_trigger"]};
+            const messageCount = {len(st.session_state["chat_history"])};
+            
+            console.log('🔄 Scroll script loaded - Trigger:', scrollTrigger, 'Messages:', messageCount);
+            
+            let scrollAttempts = 0;
+            let scrollSuccess = false;
+            
+            function forceScroll() {{
+                scrollAttempts++;
+                const doc = window.parent.document;
+                
+                // Method 1: Find by chat messages
+                const containers = doc.querySelectorAll('[data-testid="stVerticalBlockBorderWrapper"]');
+                
+                for (let container of containers) {{
+                    const messages = container.querySelectorAll('.chat-message-wrapper');
+                    
+                    if (messages.length > 0) {{
+                        const oldScroll = container.scrollTop;
+                        container.scrollTop = container.scrollHeight + 9999;
+                        
+                        console.log('📍 Attempt', scrollAttempts, '- Scrolled from', oldScroll, 'to', container.scrollTop, '/', container.scrollHeight);
+                        
+                        if (container.scrollTop > oldScroll || container.scrollTop > container.scrollHeight - container.clientHeight - 50) {{
+                            scrollSuccess = true;
+                        }}
+                        return true;
+                    }}
+                }}
+                
+                // Method 2: Find by marker
+                const marker = doc.querySelector('#chat-end-marker');
+                if (marker) {{
+                    marker.scrollIntoView({{ behavior: 'auto', block: 'end' }});
+                    console.log('📍 Scrolled using marker');
+                    return true;
+                }}
+                
+                return false;
+            }}
+            
+            // Ultra-aggressive retry mechanism
+            function aggressiveScroll() {{
+                const intervals = [0, 50, 100, 150, 200, 300, 400, 500, 700, 1000, 1500, 2000, 2500, 3000];
+                
+                intervals.forEach((delay, index) => {{
+                    setTimeout(() => {{
+                        if (!scrollSuccess || index < 5) {{
+                            forceScroll();
+                        }}
+                    }}, delay);
+                }});
+            }}
+            
+            // Start aggressive scrolling
+            if (messageCount > 0) {{
+                aggressiveScroll();
+            }}
+            
+            // MutationObserver - watch for any DOM changes
+            const observer = new MutationObserver((mutations) => {{
+                forceScroll();
+            }});
+            
+            setTimeout(() => {{
+                const main = window.parent.document.querySelector('main');
+                if (main) {{
+                    observer.observe(main, {{ 
+                        childList: true, 
+                        subtree: true,
+                        attributes: true,
+                        characterData: true
+                    }});
+                    console.log('👀 MutationObserver active');
+                }}
+            }}, 100);
+            
+            // ============================================
+            // KEYBOARD SHORTCUTS
+            // ============================================
+            window.parent.document.addEventListener('keydown', function(e) {{
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {{
+                    e.preventDefault();
+                    const btns = window.parent.document.querySelectorAll('button[data-testid="stBaseButton-primary"]');
+                    for (let btn of btns) {{
+                        if (btn.textContent.includes('➤')) {{
+                            btn.click();
+                            break;
+                        }}
+                    }}
+                }}
+            }});
+            
+            setTimeout(() => {{
+                const textareas = window.parent.document.querySelectorAll('textarea');
+                for (let ta of textareas) {{
+                    if (ta.placeholder && ta.placeholder.includes('Tanyakan')) {{
+                        ta.addEventListener('keydown', e => {{
+                            if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) e.preventDefault();
+                        }});
+                        break;
+                    }}
+                }}
+            }}, 100);
+        }})();
+        </script>
+        """
+        
+        components.html(scroll_js, height=0)
         
         # Input area
-        col1, col2 = st.columns([8, 1])
+        col1, col2 = st.columns([10, 1])
         
         with col1:
+            input_key = f"input_box_{len(st.session_state['chat_history'])}"
             user_input = st.text_area(
                 "You:", 
                 value="",
-                key="input_box",
+                key=input_key,
                 label_visibility="collapsed",
                 placeholder="💭 Tanyakan sesuatu tentang dokumen Anda...",
-                height=100
+                height=50
             )
         
         with col2:
-            send_clicked = st.button("Send", use_container_width=True, type="primary")
+            send_clicked = st.button("➤", use_container_width=True, type="primary", help="Send message (Ctrl+Enter)", key="send_button")
         
         # Handle send action
         if send_clicked and user_input.strip():
-            st.session_state["chat_history"].append(("user", user_input))
+            user_query = user_input.strip()
+            st.session_state["chat_history"].append(("user", user_query))
             
             with st.spinner("🤖 Thinking..."):
                 try:
                     engine = st.session_state["query_engine"]
-                    result = engine.query(user_input)
+                    result = engine.query(user_query)
                     
                     if result.get('success', False):
                         answer = result['answer']
@@ -356,6 +531,8 @@ elif st.session_state["current_page"] == "chat":
                     error_msg = f"❌ Error processing your question: {str(e)}"
                     st.session_state["chat_history"].append(("bot", error_msg))
             
+            # Increment scroll trigger to force new scroll
+            st.session_state["scroll_trigger"] += 1
             st.rerun()
         
         st.markdown('<div class="div-hr"></div>', unsafe_allow_html=True)
@@ -380,37 +557,59 @@ elif st.session_state["current_page"] == "chat":
                 if st.button("➕ Add to Knowledge Base", use_container_width=True, type="secondary"):
                     from ingestion.ingestion_module import process_and_index_files
                     
-                    with st.spinner("Processing additional documents..."):
-                        try:
-                            temp_dir = Path("data/temp_uploads")
-                            temp_dir.mkdir(parents=True, exist_ok=True)
+                    progress_text = st.empty()
+                    progress_bar = st.progress(0)
+                    
+                    try:
+                        progress_text.text("📁 Saving files...")
+                        progress_bar.progress(20)
+                        
+                        temp_dir = Path("data/temp_uploads")
+                        temp_dir.mkdir(parents=True, exist_ok=True)
+                        
+                        file_paths = []
+                        for idx, uploaded_file in enumerate(additional_files):
+                            file_path = temp_dir / uploaded_file.name
+                            with open(file_path, "wb") as f:
+                                f.write(uploaded_file.getbuffer())
+                            file_paths.append(file_path)
                             
-                            file_paths = []
-                            for uploaded_file in additional_files:
-                                file_path = temp_dir / uploaded_file.name
-                                with open(file_path, "wb") as f:
-                                    f.write(uploaded_file.getbuffer())
-                                file_paths.append(file_path)
+                            file_progress = 20 + (idx + 1) / len(additional_files) * 20
+                            progress_bar.progress(int(file_progress))
+                        
+                        progress_text.markdown('<p style="color: white; font-size: 16px;">🔄 Processing documents...</p>', unsafe_allow_html=True)
+                        progress_bar.progress(50)
+                        
+                        result = process_and_index_files(file_paths)
+                        progress_bar.progress(80)
+                        
+                        if result.get('success', False):
+                            progress_text.text("🔧 Updating engine...")
+                            progress_bar.progress(90)
                             
-                            result = process_and_index_files(file_paths)
+                            st.session_state["uploaded_files_list"].extend([f.name for f in additional_files])
                             
-                            if result.get('success', False):
-                                st.success(f"✅ Added {result['total_chunks']} new chunks!")
-                                st.session_state["uploaded_files_list"].extend([f.name for f in additional_files])
-                                
-                                # Reinitialize engine
-                                st.cache_resource.clear()
-                                engine, success, _ = initialize_query_engine()
-                                if success:
-                                    st.session_state["query_engine"] = engine
-                                
-                                import shutil
-                                shutil.rmtree(temp_dir)
-                                st.rerun()
-                            else:
-                                st.error(f"Error: {result.get('error', 'Unknown error')}")
-                        except Exception as e:
-                            st.error(f"Error: {str(e)}")
+                            st.cache_resource.clear()
+                            engine, success, _ = initialize_query_engine()
+                            if success:
+                                st.session_state["query_engine"] = engine
+                            
+                            import shutil
+                            shutil.rmtree(temp_dir)
+                            
+                            progress_bar.progress(100)
+                            progress_text.markdown('<p style="color: white; font-size: 16px;">✅ Complete!</p>', unsafe_allow_html=True)
+                            
+                            st.success(f"✅ Added {result['total_chunks']} new chunks!")
+                            st.rerun()
+                        else:
+                            progress_bar.empty()
+                            progress_text.empty()
+                            st.error(f"Error: {result.get('error', 'Unknown error')}")
+                    except Exception as e:
+                        progress_bar.empty()
+                        progress_text.empty()
+                        st.error(f"Error: {str(e)}")
         
         with col2:
             st.markdown("### 💡 Example Questions")
@@ -445,6 +644,7 @@ elif st.session_state["current_page"] == "chat":
                             error_msg = f"❌ Error: {str(e)}"
                             st.session_state["chat_history"].append(("bot", error_msg))
                     
+                    st.session_state["scroll_trigger"] += 1
                     st.rerun()
         
         # Show uploaded files info
