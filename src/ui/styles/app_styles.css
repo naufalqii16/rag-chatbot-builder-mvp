@@ -82,23 +82,48 @@ div.stButton > button:active {
     transform: translateY(0px);
 }
 
+/* Disabled button style */
+div.stButton > button:disabled,
+div.stButton > button[disabled] {
+    background: rgba(100, 100, 100, 0.3) !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+div.stButton > button:disabled:hover,
+div.stButton > button[disabled]:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+
+
+
 /* Secondary button style */
-div.stButton > button[kind="secondary"] {
+/* div.stButton > button[kind="secondary"] > button[data-testid="stBaseButton-secondary"] {
     background: linear-gradient(135deg, rgba(0, 191, 165, 0.2) 0%, rgba(0, 137, 123, 0.2) 100%);
     border: 2px solid rgba(0, 191, 165, 0.5);
+} */
+
+button[data-testid="stBaseButton-secondary"] {
+        background: linear-gradient(135deg, #0a3530 0%, #022420 100%) !important;
+    /* background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%) !important; */
+    color: white !important;
+    border: 1px solid #00D4B8 !important;
+    /* border: none !important; */
+    font-size: x-large !important;
 }
 
-div.stButton > button[kind="secondary"]:hover {
-    background: linear-gradient(135deg, rgba(0, 191, 165, 0.3) 0%, rgba(0, 137, 123, 0.3) 100%);
-    border-color: rgba(0, 191, 165, 0.8);
+button[data-testid="stBaseButton-secondary"]:hover {
+/* background: linear-gradient(135deg, #00D4B8 0%, #00BFA5 100%) !important;
+ */
+    background: linear-gradient(135deg, #0a3530 0%, #022420 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 25px rgba(0, 191, 165, 0.5) !important;
 }
-
-/* Home button special styling */
-/* div.stButton > button[aria-label*="home_button"], div.stButton > button[data-testid*="home"] 
-{ background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%); 
-    font-size: 24px; padding: 0.5rem; min-width: 60px; }*/
-
-
 
 
 div.stButton > button[data-baseweb="button"] {
@@ -158,6 +183,13 @@ div[data-testid="stFileUploaderDropzone"] {
     border-radius: 16px;
     padding: 2rem;
     transition: all 0.3s ease;
+}
+
+.stFileUploader:has(input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(100, 100, 100, 0.1);
+    border-color: rgba(100, 100, 100, 0.3);
 }
 
 .stFileUploader:hover {
@@ -403,6 +435,14 @@ div.stTextArea textarea:focus {
     background: rgb(23, 22, 22) !important;
 }
 
+div.stTextArea textarea:disabled,
+div.stTextArea textarea[disabled] {
+    background: rgba(23, 22, 22, 0.5) !important;
+    border-color: rgba(100, 100, 100, 0.3) !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    cursor: not-allowed !important;
+}
+
 div.stTextArea textarea::placeholder {
     color: rgba(255, 255, 255, 0.5) !important;
     opacity: 1;
@@ -598,4 +638,31 @@ div[data-testid="stExpander"] summary {
 /* Spinner */
 div[data-testid="stSpinner"] > div {
     border-top-color: #00BFA5 !important;
+}
+
+/* Dialog/Modal Styling */
+div[data-testid="stModal"] {
+    background: rgba(10, 10, 15, 0.95) !important;
+}
+
+div[data-testid="stModal"] > div {
+    background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%) !important;
+    border: 2px solid rgba(0, 191, 165, 0.3) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 191, 165, 0.2) !important;
+}
+
+div[data-testid="stModal"] h1,
+div[data-testid="stModal"] h2,
+div[data-testid="stModal"] h3 {
+    color: #00BFA5 !important;
+}
+
+div[data-testid="stModal"] button[aria-label="Close"] {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+div[data-testid="stModal"] button[aria-label="Close"]:hover {
+    color: #ffffff !important;
+    background: rgba(255, 59, 48, 0.2) !important;
 }

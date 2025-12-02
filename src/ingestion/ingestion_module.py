@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Union, Dict, List, Any
 from datetime import datetime
 import re
-
+from docx import Document
 
 class DataIngestionModule:
     """
@@ -20,7 +20,7 @@ class DataIngestionModule:
     """
     
     def __init__(self):
-        self.supported_formats = ['.pdf', '.xlsx', '.xls', '.csv', '.txt']
+        self.supported_formats = ['.pdf', '.xlsx', '.xls', '.csv', '.txt', '.docx']
         self.ingestion_metadata = {}
     
     def ingest_file(self, file_path: str, **kwargs) -> Dict[str, Any]:
@@ -66,6 +66,9 @@ class DataIngestionModule:
                 result = self._ingest_csv(file_path, **kwargs)
             elif file_ext == '.txt':
                 result = self._ingest_txt(file_path, **kwargs)
+            elif file_ext == '.docx':
+                result = self._ingest_docx(file_path, **kwargs)
+
             
             # Apply data cleaning if requested and data is DataFrame
             if kwargs.get('clean_data', True) and isinstance(result.get('data'), pd.DataFrame):
@@ -81,6 +84,51 @@ class DataIngestionModule:
             
         except Exception as e:
             return self._error_response(f"Ingestion failed: {str(e)}")
+    
+    
+    def _ingest_docx(self, file_path: Path, **kwargs) -> Dict[str, Any]:
+        """
+        Extract text content from DOCX (Word) files.
+        Supports basic cleaning similar to PDF/TXT ingestion.
+        """
+        # try:
+        #     from docx import Document
+        # except ImportError:
+        #     return self._error_response(
+        #         "python-docx not installed. Install with: pip install python-docx"
+        #     )
+
+        doc = Document(file_path)
+        
+        # Extract paragraphs
+        paragraphs = [para.text for para in doc.paragraphs]
+        text_content = "\n".join(paragraphs)
+        
+        original_length = len(text_content)
+        
+        # Apply cleaning (optional)
+        if kwargs.get('clean_data', True):
+            text_content = self._clean_text(text_content)
+
+        return {
+            'data': text_content,
+            'metadata': {
+                'file_name': file_path.name,
+                'file_type': 'DOCX',
+                'file_size_bytes': file_path.stat().st_size,
+                'paragraph_count': len(paragraphs),
+                'character_count': len(text_content),
+                'word_count': len(text_content.split()),
+                'ingestion_time': datetime.now().isoformat(),
+                'cleaned': kwargs.get('clean_data', True),
+                'original_length': original_length,
+                'reduction_percentage': round(
+                    (1 - len(text_content) / original_length) * 100, 2
+                ) if original_length > 0 else 0
+            }
+        }
+
+    
     
     def _ingest_pdf(self, file_path: Path, **kwargs) -> Dict[str, Any]:
         """Extract text content from PDF files."""
@@ -315,7 +363,7 @@ class DataIngestionModule:
     
     def _clean_text(self, text: str) -> str:
         """
-        Apply comprehensive text cleaning for PDF and TXT files.
+        Apply comprehensive text cleaning for PDF, TXT. and Docs files.
         
         Cleaning steps:
         1. Fix encoding issues

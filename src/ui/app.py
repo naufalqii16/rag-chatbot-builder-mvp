@@ -50,6 +50,14 @@ if "uploaded_files_list" not in st.session_state:
     st.session_state["uploaded_files_list"] = []
 if "scroll_trigger" not in st.session_state:
     st.session_state["scroll_trigger"] = 0
+if "indexing_stats" not in st.session_state:
+    st.session_state["indexing_stats"] = None
+if "show_stats_popup" not in st.session_state:
+    st.session_state["show_stats_popup"] = False
+if "upload_counter" not in st.session_state:
+    st.session_state["upload_counter"] = 0
+if "is_processing" not in st.session_state:
+    st.session_state["is_processing"] = False
 
 # ----------------------------
 # Initialize RAG Engine
@@ -97,6 +105,10 @@ def reset_chatbot():
     st.session_state["uploaded_files_list"] = []
     st.session_state["scroll_trigger"] = 0
     st.session_state["query_engine"] = None
+    st.session_state["indexing_stats"] = None
+    st.session_state["show_stats_popup"] = False
+    st.session_state["upload_counter"] = 0
+    st.session_state["is_processing"] = False
     
     # Clear all caches
     st.cache_resource.clear()
@@ -201,7 +213,7 @@ elif st.session_state["current_page"] == "chat":
     # Header with Home button
     col1, col2 = st.columns([1, 11])
     with col1:
-        if st.button("🏠", key="home_button", use_container_width=True):
+        if st.button("🏠", key="home_button", help="Go Home (resets the chatbot)",  use_container_width=True):
             reset_chatbot()
             st.rerun()
   
@@ -213,7 +225,7 @@ elif st.session_state["current_page"] == "chat":
     # ============================
     # STATE 1: UPLOAD DOCUMENTS
     # ============================
-    if st.session_state["chat_state"] == "upload":
+    if st.session_state["chat_state"] == "upload" and st.session_state["indexing_stats"] is None:
         
         st.markdown("""
         <div class="upload-container">
@@ -230,7 +242,8 @@ elif st.session_state["current_page"] == "chat":
             accept_multiple_files=True,
             type=["pdf", "csv", "txt", "xlsx", "xls", "docx", "doc"],
             help="Format yang didukung: PDF, CSV, TXT, XLSX, DOCX",
-            label_visibility="collapsed"
+            label_visibility="collapsed",
+            key=f"initial_upload_{st.session_state['upload_counter']}"
         )
         
         # Display uploaded files
@@ -284,19 +297,6 @@ elif st.session_state["current_page"] == "chat":
                                 progress_bar.progress(100)
                                 progress_text.markdown('<p style="color: white; font-size: 16px;">✅ Processing complete!</p>', unsafe_allow_html=True)
                                 
-                                st.success(f"✅ Successfully processed {result['total_chunks']} chunks from {len(uploaded_files)} file(s)!")
-                                st.balloons()
-                                
-                                # Show stats
-                                st.markdown("### 📊 Indexing Statistics:")
-                                col1, col2, col3 = st.columns(3)
-                                with col1:
-                                    st.metric("Files Processed", len(uploaded_files))
-                                with col2:
-                                    st.metric("Total Chunks", result['total_chunks'])
-                                with col3:
-                                    st.metric("Vectors Added", result.get('vectors_indexed', result['total_chunks']))
-                                
                                 # Save uploaded files list
                                 st.session_state["uploaded_files_list"].extend([f.name for f in uploaded_files])
                                 
@@ -304,14 +304,18 @@ elif st.session_state["current_page"] == "chat":
                                 import shutil
                                 shutil.rmtree(temp_dir)
                                 
-                                # Set engine and chat state
+                                # Set engine and prepare for stats display
                                 st.session_state["query_engine"] = engine
+                                st.session_state["indexing_stats"] = {
+                                    'num_files': len(uploaded_files),
+                                    'total_chunks': result['total_chunks'],
+                                    'vectors_indexed': result.get('vectors_indexed', result['total_chunks'])
+                                }
                                 st.session_state["chat_history"] = [
                                     ("bot", "Hi! Saya sudah membaca dokumen Anda. Silakan tanyakan apapun tentang isi dokumen! 📚")
                                 ]
-                                st.session_state["chat_state"] = "chat"
                                 st.session_state["scroll_trigger"] = 1
-                                st.success("✅ Ready to chat!")
+                                st.session_state["upload_counter"] += 1  # Increment to clear file uploader
                                 st.rerun()
                             else:
                                 progress_bar.empty()
@@ -333,10 +337,67 @@ elif st.session_state["current_page"] == "chat":
             st.info("👆 Pilih file untuk memulai")
     
     # ============================
+    # STATE 1.5: SHOW INDEXING STATS
+    # ============================
+    elif st.session_state["chat_state"] == "upload" and st.session_state["indexing_stats"] is not None:
+        
+        st.success(f"✅ Successfully processed {st.session_state['indexing_stats']['total_chunks']} chunks from {st.session_state['indexing_stats']['num_files']} file(s)!")
+        st.balloons()
+        
+        st.markdown("&nbsp;")
+        
+        # Show stats
+        st.markdown("### 📊 Indexing Statistics:")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Files Processed", st.session_state['indexing_stats']['num_files'])
+        with col2:
+            st.metric("Total Chunks", st.session_state['indexing_stats']['total_chunks'])
+        with col3:
+            st.metric("Vectors Added", st.session_state['indexing_stats']['vectors_indexed'])
+        
+        st.markdown("&nbsp;")
+        st.markdown("&nbsp;")
+        
+        # Button to go to chatbot
+        col1, col2, col3 = st.columns([2, 3, 2])
+        with col2:
+            if st.button("🚀 Go to Chatbot", use_container_width=True, type="primary", key="go_to_chat_btn"):
+                st.session_state["chat_state"] = "chat"
+                st.session_state["show_stats_popup"] = False
+                st.rerun()
+    
+    # ============================
     # STATE 2: CHAT INTERFACE
     # ============================
     elif st.session_state["chat_state"] == "chat":
     
+        # Show stats popup if needed
+        if st.session_state["show_stats_popup"] and st.session_state["indexing_stats"] is not None:
+            
+            @st.dialog("✅ Indexing Complete!")
+            def show_stats_dialog():
+                st.success(f"Successfully processed {st.session_state['indexing_stats']['total_chunks']} chunks from {st.session_state['indexing_stats']['num_files']} file(s)!")
+                
+                st.markdown("### 📊 Indexing Statistics:")
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("Files Processed", st.session_state['indexing_stats']['num_files'])
+                with col2:
+                    st.metric("Total Chunks", st.session_state['indexing_stats']['total_chunks'])
+                with col3:
+                    st.metric("Vectors Added", st.session_state['indexing_stats']['vectors_indexed'])
+                
+                st.markdown("&nbsp;")
+                
+                col1, col2, col3 = st.columns([1, 2, 1])
+                with col2:
+                    if st.button("OK", use_container_width=True, type="primary", key="ok_stats_btn"):
+                        st.session_state["show_stats_popup"] = False
+                        st.rerun()
+            
+            show_stats_dialog()
+        
         # Initialize engine if not already done
         if st.session_state["query_engine"] is None:
             with st.spinner("🔧 Initializing RAG engine..."):
@@ -500,7 +561,7 @@ elif st.session_state["current_page"] == "chat":
             )
         
         with col2:
-            send_clicked = st.button("➤", use_container_width=True, type="primary", help="Send message (Ctrl+Enter)", key="send_button")
+            send_clicked = st.button("➤", use_container_width=True, type="primary", help="Send message (Ctrl+Enter)", key="send_button", disabled=st.session_state["is_processing"])
         
         # Handle send action
         if send_clicked and user_input.strip():
@@ -547,15 +608,19 @@ elif st.session_state["current_page"] == "chat":
                 "Add more documents",
                 accept_multiple_files=True,
                 type=["pdf", "csv", "txt", "xlsx", "xls", "docx", "doc"],
-                key="additional_upload",
-                label_visibility="collapsed"
+                key=f"additional_upload_{st.session_state['upload_counter']}",
+                label_visibility="collapsed",
+                disabled=st.session_state["is_processing"]
             )
             
             if additional_files:
                 st.markdown(f"**{len(additional_files)} file(s) selected**")
                 
-                if st.button("➕ Add to Knowledge Base", use_container_width=True, type="secondary"):
+                if st.button("➕ Add to Knowledge Base", use_container_width=True, type="secondary", disabled=st.session_state["is_processing"]):
                     from ingestion.ingestion_module import process_and_index_files
+                    
+                    # Set processing flag
+                    st.session_state["is_processing"] = True
                     
                     progress_text = st.empty()
                     progress_bar = st.progress(0)
@@ -600,13 +665,25 @@ elif st.session_state["current_page"] == "chat":
                             progress_bar.progress(100)
                             progress_text.markdown('<p style="color: white; font-size: 16px;">✅ Complete!</p>', unsafe_allow_html=True)
                             
+                            # Store stats for popup
+                            st.session_state["indexing_stats"] = {
+                                'num_files': len(additional_files),
+                                'total_chunks': result['total_chunks'],
+                                'vectors_indexed': result.get('vectors_indexed', result['total_chunks'])
+                            }
+                            st.session_state["show_stats_popup"] = True
+                            st.session_state["upload_counter"] += 1  # Increment to clear file uploader
+                            st.session_state["is_processing"] = False  # Reset processing flag
+                            
                             st.success(f"✅ Added {result['total_chunks']} new chunks!")
                             st.rerun()
                         else:
+                            st.session_state["is_processing"] = False  # Reset on error
                             progress_bar.empty()
                             progress_text.empty()
                             st.error(f"Error: {result.get('error', 'Unknown error')}")
                     except Exception as e:
+                        st.session_state["is_processing"] = False  # Reset on exception
                         progress_bar.empty()
                         progress_text.empty()
                         st.error(f"Error: {str(e)}")
@@ -622,7 +699,7 @@ elif st.session_state["current_page"] == "chat":
             ]
             
             for idx, question in enumerate(example_questions):
-                if st.button(question, key=f"example_{idx}", use_container_width=True):
+                if st.button(question, key=f"example_{idx}", use_container_width=True, disabled=st.session_state["is_processing"]):
                     st.session_state["chat_history"].append(("user", question))
                     
                     with st.spinner("🤖 Thinking..."):
