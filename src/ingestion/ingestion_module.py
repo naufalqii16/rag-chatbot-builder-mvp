@@ -536,6 +536,7 @@ if __name__ == "__main__":
 def process_and_index_files(file_paths: List[Path]) -> Dict[str, Any]:
     """
     Process uploaded files: chunk and index to vector database.
+    Optimized for large files with batch processing.
     
     Args:
         file_paths: List of file paths to process
@@ -552,15 +553,44 @@ def process_and_index_files(file_paths: List[Path]) -> Dict[str, Any]:
         from vectorstore.index_builder import IndexBuilder
         from ingestion.user_upload_chunking import process_user_files
         
+        print(f"\n{'='*70}")
+        print(f"📦 PROCESSING {len(file_paths)} FILE(S)")
+        print(f"{'='*70}")
+        
+        # Check file sizes
+        total_size_mb = 0
+        for file_path in file_paths:
+            size_mb = file_path.stat().st_size / (1024 * 1024)
+            total_size_mb += size_mb
+            print(f"📄 {file_path.name}: {size_mb:.2f} MB")
+            
+            # Check individual file size limit
+            if settings.MAX_FILE_SIZE_MB > 0 and size_mb > settings.MAX_FILE_SIZE_MB:
+                return {
+                    'success': False,
+                    'error': f"File '{file_path.name}' ({size_mb:.2f} MB) exceeds limit of {settings.MAX_FILE_SIZE_MB} MB. "
+                            f"Increase MAX_FILE_SIZE_MB in .env or split the file."
+                }
+        
+        print(f"📊 Total size: {total_size_mb:.2f} MB")
+        
+        if total_size_mb > settings.MAX_FILE_SIZE_MB * len(file_paths):
+            print(f"⚠️  Large files detected - using batch processing")
+        
+        print(f"")
+        
         # Step 1: Ingest and chunk files
         all_chunks = []
         
-        for file_path in file_paths:
+        for idx, file_path in enumerate(file_paths, 1):
+            print(f"[{idx}/{len(file_paths)}] Processing: {file_path.name}")
+            
             # Ingest file
             module = DataIngestionModule()
             result = module.ingest_file(str(file_path))
             
             if result['status'] != 'success':
+                print(f"   ⚠️  Skipped (ingestion failed)")
                 continue
             
             # Convert to text
@@ -571,6 +601,8 @@ def process_and_index_files(file_paths: List[Path]) -> Dict[str, Any]:
                 # For text/PDF
                 text_content = result['data']
             
+            print(f"   📝 Content length: {len(text_content):,} characters")
+            
             # Chunk the text
             chunks = process_user_files(
                 text_content=text_content,
@@ -579,6 +611,7 @@ def process_and_index_files(file_paths: List[Path]) -> Dict[str, Any]:
                 chunk_overlap=settings.CHUNK_OVERLAP
             )
             
+            print(f"   ✅ Generated {len(chunks)} chunks")
             all_chunks.extend(chunks)
         
         if not all_chunks:
@@ -587,20 +620,31 @@ def process_and_index_files(file_paths: List[Path]) -> Dict[str, Any]:
                 'error': 'No chunks generated from files'
             }
         
-        # Step 2: Build index (embed and store in Qdrant)
+        print(f"\n{'='*70}")
+        print(f"📊 TOTAL CHUNKS: {len(all_chunks)}")
+        print(f"{'='*70}\n")
+        
+        # Step 2: Build index with batch processing
+        print(f"💾 Indexing to Qdrant (batch size: {settings.PROCESSING_BATCH_SIZE})...")
         builder = IndexBuilder(collection_name=settings.QDRANT_USER_UPLOAD_COLLECTION)
+        
         success = builder.build_index(
             chunks=all_chunks,
-            batch_size=20,
+            batch_size=settings.PROCESSING_BATCH_SIZE,
             create_new_collection=False  # Append to existing collection
         )
         
         if success:
+            print(f"\n{'='*70}")
+            print(f"✅ INDEXING COMPLETE")
+            print(f"{'='*70}\n")
+            
             return {
                 'success': True,
                 'total_chunks': len(all_chunks),
                 'vectors_indexed': len(all_chunks),
-                'files_processed': len(file_paths)
+                'files_processed': len(file_paths),
+                'total_size_mb': round(total_size_mb, 2)
             }
         else:
             return {
@@ -610,6 +654,8 @@ def process_and_index_files(file_paths: List[Path]) -> Dict[str, Any]:
             
     except Exception as e:
         import traceback
+        print(f"\n❌ ERROR: {str(e)}")
+        traceback.print_exc()
         return {
             'success': False,
             'error': str(e),

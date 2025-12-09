@@ -250,6 +250,25 @@ elif st.session_state["current_page"] == "chat":
         if uploaded_files:
             st.markdown("&nbsp;")
             
+            # Check file sizes
+            total_size = sum(f.size for f in uploaded_files)
+            total_size_mb = total_size / (1024 * 1024)
+            
+            # Show file list with sizes
+            st.markdown("**📋 Selected Files:**")
+            for f in uploaded_files:
+                size_mb = f.size / (1024 * 1024)
+                st.markdown(f"- `{f.name}` ({size_mb:.2f} MB)")
+            
+            st.markdown(f"**Total: {total_size_mb:.2f} MB**")
+            
+            # Warning for large files
+            if total_size_mb > settings.MAX_FILE_SIZE_MB:
+                st.warning(f"⚠️ Total size ({total_size_mb:.2f} MB) is large. Processing may take longer. "
+                          f"Current limit: {settings.MAX_FILE_SIZE_MB} MB per file.")
+            
+            st.markdown("&nbsp;")
+            
             # Process button
             col1, col2, col3 = st.columns([2, 3, 2])
             with col2:

@@ -80,6 +80,16 @@ class Settings:
     CHUNK_SIZE: int = int(os.getenv("CHUNK_SIZE", "512"))
     CHUNK_OVERLAP: int = int(os.getenv("CHUNK_OVERLAP", "50"))
     
+    # ==================== FILE PROCESSING LIMITS ====================
+    # Maximum file size in MB (0 = no limit)
+    MAX_FILE_SIZE_MB: int = int(os.getenv("MAX_FILE_SIZE_MB", "50"))
+    
+    # Batch size for processing chunks (smaller = less memory, slower)
+    PROCESSING_BATCH_SIZE: int = int(os.getenv("PROCESSING_BATCH_SIZE", "50"))
+    
+    # Embedding batch size (for API calls)
+    EMBEDDING_BATCH_SIZE: int = int(os.getenv("EMBEDDING_BATCH_SIZE", "100"))
+    
     # ==================== RETRIEVAL CONFIGURATION ====================
     # Top-k results to retrieve
     RETRIEVAL_TOP_K: int = int(os.getenv("RETRIEVAL_TOP_K", "5"))
