@@ -535,25 +535,24 @@ elif st.session_state["current_page"] == "chat":
             // ============================================
             // KEYBOARD SHORTCUTS
             // ============================================
-            window.parent.document.addEventListener('keydown', function(e) {{
-                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {{
-                    e.preventDefault();
-                    const btns = window.parent.document.querySelectorAll('button[data-testid="stBaseButton-primary"]');
-                    for (let btn of btns) {{
-                        if (btn.textContent.includes('➤')) {{
-                            btn.click();
-                            break;
-                        }}
-                    }}
-                }}
-            }});
-            
             setTimeout(() => {{
                 const textareas = window.parent.document.querySelectorAll('textarea');
                 for (let ta of textareas) {{
                     if (ta.placeholder && ta.placeholder.includes('Tanyakan')) {{
-                        ta.addEventListener('keydown', e => {{
-                            if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) e.preventDefault();
+                        ta.addEventListener('keydown', function(e) {{
+                            // Enter (without Shift) = send message
+                            if (e.key === 'Enter' && !e.shiftKey) {{
+                                e.preventDefault();
+                                // Find and click the send button
+                                const btns = window.parent.document.querySelectorAll('button[data-testid="stBaseButton-primary"]');
+                                for (let btn of btns) {{
+                                    if (btn.textContent.includes('➤')) {{
+                                        btn.click();
+                                        break;
+                                    }}
+                                }}
+                            }}
+                            // Shift+Enter = new line (default behavior, do nothing)
                         }});
                         break;
                     }}
@@ -580,7 +579,7 @@ elif st.session_state["current_page"] == "chat":
             )
         
         with col2:
-            send_clicked = st.button("➤", use_container_width=True, type="primary", help="Send message (Ctrl+Enter)", key="send_button", disabled=st.session_state["is_processing"])
+            send_clicked = st.button("➤", use_container_width=True, type="primary", help="Send message (Enter)", key="send_button", disabled=st.session_state["is_processing"])
         
         # Handle send action
         if send_clicked and user_input.strip():
