@@ -96,6 +96,12 @@ Answer:"""
             print(f"🔍 Retrieving context for: '{question}'")
             retrieval_results = self.retriever.retrieve(question, top_k)
             
+            # Debug: Print metadata structure
+            if retrieval_results and len(retrieval_results) > 0:
+                print(f"📋 DEBUG - First result metadata structure:")
+                print(f"   Keys: {list(retrieval_results[0].keys())}")
+                print(f"   Metadata: {retrieval_results[0].get('metadata', {})}")
+            
             # Check if we got results
             if not retrieval_results:
                 return {

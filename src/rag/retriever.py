@@ -83,13 +83,17 @@ class Retriever:
                 score_threshold=self.min_score
             )
             
-            # Format results - results already filtered by score_threshold
+            # Format results - search_results is already formatted by qdrant_store
+            # Each result has: id, score, text, metadata
             results = []
             for result in search_results:
+                # Extract metadata, removing 'text' field since it's already at top level
+                metadata = {k: v for k, v in result.get('metadata', {}).items() if k != 'text'}
+                
                 results.append({
                     'chunk_id': result.get('id'),
                     'text': result.get('text', ''),
-                    'metadata': result.get('metadata', {}),
+                    'metadata': metadata,
                     'score': result.get('score', 0.0)
                 })
             

@@ -579,7 +579,37 @@ elif st.session_state["current_page"] == "chat":
                         
                         if num_sources > 0:
                             avg_score = result['avg_score']
-                            response = f"{answer}\n\n📚 Sources: {num_sources} chunks (avg score: {avg_score:.2f})"
+                            sources = result.get('sources', [])
+                            
+                            # Extract unique source files from metadata
+                            source_files = set()
+                            print(f"🔍 DEBUG: Extracting sources from {len(sources)} results")
+                            for idx, source in enumerate(sources):
+                                metadata = source.get('metadata', {})
+                                print(f"   Source {idx}: metadata keys = {list(metadata.keys())}")
+                                # Check nested metadata first (this is the correct structure from inspect)
+                                if 'metadata' in metadata and isinstance(metadata['metadata'], dict):
+                                    source_file = metadata['metadata'].get('source', '')
+                                    print(f"      Found nested metadata.source = '{source_file}'")
+                                else:
+                                    # Fallback to direct source
+                                    source_file = metadata.get('source', '')
+                                    print(f"      Found direct source = '{source_file}'")
+                                
+                                if source_file:
+                                    source_files.add(source_file)
+                            
+                            print(f"✅ Final source_files: {source_files}")
+                            
+                            # Build response with file sources
+                            response = f"{answer}"
+                            response += f"\n\n━━━━━━━━━━━━━━━━━━━━━━━━"
+                            response += f"\n📚 Sumber: {num_sources} chunks (avg score: {avg_score:.2f})"
+                            
+                            if source_files:
+                                response += "\n📄 File sumber:"
+                                for idx, file_name in enumerate(sorted(source_files), 1):
+                                    response += f"\n   {idx}. {file_name}"
                         else:
                             response = f"{answer}\n\n💡 Tip: Coba ubah pertanyaan atau turunkan MIN_SIMILARITY_SCORE di .env"
                         
@@ -709,10 +739,44 @@ elif st.session_state["current_page"] == "chat":
                             
                             if result['success']:
                                 answer = result['answer']
-                                num_sources = result['num_sources']
-                                avg_score = result['avg_score']
+                                num_sources = result.get('num_sources', 0)
                                 
-                                response = f"{answer}\n\n📚 Sources: {num_sources} chunks (avg score: {avg_score:.2f})"
+                                if num_sources > 0:
+                                    avg_score = result['avg_score']
+                                    sources = result.get('sources', [])
+                                    
+                                    # Extract unique source files from metadata
+                                    source_files = set()
+                                    print(f"🔍 DEBUG: Extracting sources from {len(sources)} results")
+                                    for idx, source in enumerate(sources):
+                                        metadata = source.get('metadata', {})
+                                        print(f"   Source {idx}: metadata keys = {list(metadata.keys())}")
+                                        # Check nested metadata first (this is the correct structure from inspect)
+                                        if 'metadata' in metadata and isinstance(metadata['metadata'], dict):
+                                            source_file = metadata['metadata'].get('source', '')
+                                            print(f"      Found nested metadata.source = '{source_file}'")
+                                        else:
+                                            # Fallback to direct source
+                                            source_file = metadata.get('source', '')
+                                            print(f"      Found direct source = '{source_file}'")
+                                        
+                                        if source_file:
+                                            source_files.add(source_file)
+                                    
+                                    print(f"✅ Final source_files: {source_files}")
+                                    
+                                    # Build response with file sources
+                                    response = f"{answer}"
+                                    response += f"\n\n━━━━━━━━━━━━━━━━━━━━━━━━"
+                                    response += f"\n📚 Sumber: {num_sources} chunks (avg score: {avg_score:.2f})"
+                                    
+                                    if source_files:
+                                        response += "\n📄 File sumber:"
+                                        for file_idx, file_name in enumerate(sorted(source_files), 1):
+                                            response += f"\n   {file_idx}. {file_name}"
+                                else:
+                                    response = f"{answer}\n\n💡 Tip: Coba ubah pertanyaan atau turunkan MIN_SIMILARITY_SCORE di .env"
+                                
                                 st.session_state["chat_history"].append(("bot", response))
                             else:
                                 error_msg = f"❌ Sorry, I encountered an error: {result.get('error', 'Unknown error')}"
