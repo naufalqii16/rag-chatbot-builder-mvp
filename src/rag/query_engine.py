@@ -104,11 +104,20 @@ Answer:"""
             
             # Check if we got results
             if not retrieval_results:
+                # More helpful error message with diagnostics
+                error_msg = (
+                    "I couldn't find any relevant information in the database to answer your question.\n\n"
+                    f"🔍 **Debugging Tips:**\n"
+                    f"- Check if documents were successfully indexed (collection: {self.collection_name})\n"
+                    f"- Current similarity threshold: {self.retriever.min_score}\n"
+                    f"- Try rephrasing your question or lowering MIN_SIMILARITY_SCORE in .env\n"
+                    f"- Use the inspect script to verify data: `python src/vectorstore/inspect_qdrant.py`"
+                )
                 return {
-                    'answer': "I couldn't find any relevant information in the database to answer your question. Try rephrasing or asking about different topics.",
+                    'answer': error_msg,
                     'sources': [],
                     'num_sources': 0,
-                    'avg_score': 0.0,  # Add default avg_score
+                    'avg_score': 0.0,
                     'success': True,
                     'no_results': True,
                     'model': self.model,

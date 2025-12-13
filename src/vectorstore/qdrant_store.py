@@ -231,6 +231,16 @@ class QdrantVectorStore:
                 - metadata: All metadata fields
         """
         try:
+            # Check if collection exists first
+            try:
+                collection_info = self.client.get_collection(self.collection_name)
+                if collection_info.points_count == 0:
+                    print(f"⚠️  Collection '{self.collection_name}' is empty (0 vectors)")
+                    return []
+            except Exception as e:
+                print(f"❌ Collection '{self.collection_name}' not found or inaccessible: {e}")
+                return []
+            
             # Try new API first (qdrant-client >= 1.8.0)
             try:
                 search_results = self.client.query_points(
@@ -239,14 +249,20 @@ class QdrantVectorStore:
                     limit=top_k,
                     score_threshold=score_threshold,
                 ).points
-            except (AttributeError, TypeError):
+            except (AttributeError, TypeError) as api_error:
                 # Fallback to old API (qdrant-client < 1.8.0)
-                search_results = self.client.search(
-                    collection_name=self.collection_name,
-                    query_vector=query_vector,
-                    limit=top_k,
-                    score_threshold=score_threshold,
-                )
+                try:
+                    search_results = self.client.search(
+                        collection_name=self.collection_name,
+                        query_vector=query_vector,
+                        limit=top_k,
+                        score_threshold=score_threshold,
+                    )
+                except Exception as old_api_error:
+                    print(f"❌ Both API methods failed:")
+                    print(f"   New API error: {api_error}")
+                    print(f"   Old API error: {old_api_error}")
+                    return []
             
             # Format results
             results = []
@@ -263,6 +279,8 @@ class QdrantVectorStore:
             
         except Exception as e:
             print(f"❌ Error during search: {e}")
+            import traceback
+            traceback.print_exc()
             return []
     
     def count_vectors(self) -> int:

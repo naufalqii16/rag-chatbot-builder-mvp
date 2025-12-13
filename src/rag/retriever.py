@@ -73,15 +73,71 @@ class Retriever:
                 create_collection=False
             )
             
+            # DIAGNOSTIC: Check if collection exists and has data
+            try:
+                collection_info = self.client.get_collection_info()
+                vector_count = collection_info.get('points_count', 0)
+                print(f"🔍 DEBUG: Collection '{self.collection_name}' has {vector_count} vectors")
+                
+                if vector_count == 0:
+                    print(f"⚠️  WARNING: Collection '{self.collection_name}' is empty! No documents indexed.")
+                    return []
+            except Exception as e:
+                print(f"❌ ERROR: Cannot access collection '{self.collection_name}': {e}")
+                print(f"   Make sure the collection exists and documents have been indexed.")
+                return []
+            
             # Generate query embedding
+            print(f"🔍 DEBUG: Generating embedding for query: '{query[:50]}...'")
             query_embedding = self._get_query_embedding(query)
             
-            # Search in Qdrant using the correct method signature
+            if not query_embedding or len(query_embedding) == 0:
+                print(f"❌ ERROR: Failed to generate query embedding")
+                return []
+            
+            print(f"✅ DEBUG: Generated embedding with dimension {len(query_embedding)}")
+            print(f"🔍 DEBUG: Searching with threshold: {self.min_score}, top_k: {k}")
+            
+            # First, try without threshold to see what scores we get
+            search_results_all = self.client.search(
+                query_vector=query_embedding,
+                top_k=k * 2,  # Get more results to see actual scores
+                score_threshold=None  # No threshold for diagnostic
+            )
+            
+            print(f"🔍 DEBUG: Found {len(search_results_all)} results without threshold")
+            
+            if search_results_all:
+                # Show score range
+                scores = [r.get('score', 0.0) for r in search_results_all]
+                print(f"🔍 DEBUG: Score range: min={min(scores):.4f}, max={max(scores):.4f}, avg={sum(scores)/len(scores):.4f}")
+                print(f"🔍 DEBUG: Current threshold: {self.min_score}")
+                
+                # Filter by threshold
+                filtered_results = [r for r in search_results_all if r.get('score', 0.0) >= self.min_score]
+                print(f"🔍 DEBUG: After threshold filter: {len(filtered_results)} results")
+                
+                if len(filtered_results) == 0 and len(search_results_all) > 0:
+                    print(f"⚠️  WARNING: All results filtered out by threshold {self.min_score}!")
+                    print(f"   Highest score was {max(scores):.4f}. Consider lowering MIN_SIMILARITY_SCORE.")
+                    # Return top results even if below threshold for debugging
+                    filtered_results = search_results_all[:k]
+                    print(f"   Returning top {len(filtered_results)} results anyway for debugging...")
+            else:
+                filtered_results = []
+            
+            # Now do the actual search with threshold
             search_results = self.client.search(
                 query_vector=query_embedding,
                 top_k=k,
                 score_threshold=self.min_score
             )
+            
+            # Use diagnostic results if actual search returned nothing but we have results
+            if not search_results and filtered_results:
+                search_results = filtered_results[:k]
+            
+            print(f"✅ DEBUG: Returning {len(search_results)} results")
             
             # Format results - search_results is already formatted by qdrant_store
             # Each result has: id, score, text, metadata
